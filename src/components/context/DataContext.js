@@ -6,7 +6,7 @@ export const DataContext = React.createContext(undefined)
 export const useData = () => useContext(DataContext)
 import { v4 as uuid } from 'uuid'
 
-const apiUrl = `http://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}`
+const apiUrl = process.env.REACT_APP_API
 
 export const DataProvider = ({ children }) => {
   const updated = useRef([])

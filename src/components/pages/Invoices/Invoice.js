@@ -29,7 +29,7 @@ export default function Invoice() {
   const [prefix, setPrefix] = useState()
   const [pdfUrl, setPdfUrl] = useState()
 
-  const apiUrl = `http://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}`
+  const apiUrl = process.env.REACT_APP_API
 
   useEffect(() => {
     if (customerId) {
