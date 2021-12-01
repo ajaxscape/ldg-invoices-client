@@ -38,12 +38,6 @@ export default function Customer() {
             label="Invoices"
           />
 
-          <MenuButton
-            to={`/Customers/${customerId}/Visits/${uuid()}/Edit`}
-            icon={AddIcon}
-            label="New Visit"
-          />
-
           {!customer?.billPayer && (
             <MenuButton
               to={`/Customers/${customerId}/BillPayer/${uuid()}/Edit`}

@@ -39,8 +39,15 @@ export function VisitCard({ editLink, customerId }) {
   const { getCustomerById } = useData()
   const { property, tasks, visitDateTime } = useVisit()
   const { startTime, finishTime } = visitDateTime || {}
+  const [displayCard, setDisplayCard] = useState()
   const [fullName, setFullName] = useState('')
   const [showAddress, setShowAddress] = useState(false)
+
+  useEffect(() => {
+    if (!!startTime && startTime.toDateString() !== 'Invalid Date') {
+      setDisplayCard(true)
+    }
+  }, [startTime])
 
   useEffect(() => {
     if (customerId && getCustomerById) {
@@ -62,64 +69,66 @@ export function VisitCard({ editLink, customerId }) {
 
   return (
     <Root>
-      <Grid item xs={12}>
-        <Card className={classes.card}>
-          <CardContent>
-            <strong>
-              {!!startTime && (
-                <>
-                  {format(startTime, 'dd MMMM yyyy')}
-                  <br />
-                  {format(startTime, 'h:mm a')} to{' '}
-                  {format(finishTime, 'h:mm a')}
-                </>
-              )}
-            </strong>
-            {!!fullName && (
-              <>
-                <br />
-                <br />
-                {fullName},
-              </>
-            )}
-            {!!property?.address && showAddress && (
-              <>
-                {!fullName && (
+      {!!displayCard && (
+        <Grid item xs={12}>
+          <Card className={classes.card}>
+            <CardContent>
+              <strong>
+                {!!startTime && (
                   <>
+                    {format(startTime, 'dd MMMM yyyy')}
                     <br />
-                    <br />
+                    {format(startTime, 'h:mm a')} to{' '}
+                    {format(finishTime, 'h:mm a')}
                   </>
                 )}
-                <FullAddress address={property.address} />
-              </>
-            )}
-            {!!tasks?.length && (
-              <>
-                <br />
-                <VisitTaskTable
-                  tasks={[...tasks, { taskName: 'Breaks', quantity: 0 }]}
-                />
-              </>
-            )}
-          </CardContent>
-          <div className={classes.buttons}>
-            {!!editLink && (
-              <>
-                <IconButton
-                  edge="end"
-                  variant="contained"
-                  color={'primary'}
-                  to={editLink}
-                  component={Link}
-                  tabIndex={0}
-                >
-                  <EditIcon />
-                </IconButton>
-              </>
-            )}
-          </div>
-        </Card>
-      </Grid>
+              </strong>
+              {!!fullName && (
+                <>
+                  <br />
+                  <br />
+                  {fullName},
+                </>
+              )}
+              {!!property?.address && showAddress && (
+                <>
+                  {!fullName && (
+                    <>
+                      <br />
+                      <br />
+                    </>
+                  )}
+                  <FullAddress address={property.address} />
+                </>
+              )}
+              {!!tasks?.length && (
+                <>
+                  <br />
+                  <VisitTaskTable
+                    tasks={[...tasks, { taskName: 'Breaks', quantity: 0 }]}
+                  />
+                </>
+              )}
+            </CardContent>
+            <div className={classes.buttons}>
+              {!!editLink && (
+                <>
+                  <IconButton
+                    edge="end"
+                    variant="contained"
+                    color={'primary'}
+                    to={editLink}
+                    component={Link}
+                    tabIndex={0}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </>
+              )}
+            </div>
+          </Card>
+        </Grid>
+      )}
     </Root>
   )
 }

@@ -8,6 +8,9 @@ import MenuGroup from '../../fragments/MenuGroup'
 import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { VisitDetails } from '../../fragments/VisitDetails'
+import { MenuButton } from '../../fragments/Buttons/MenuButton'
+import { v4 as uuid } from 'uuid'
+import AddIcon from '@mui/icons-material/Add'
 
 function VisitGroup({ visits, label, customerId }) {
   return (
@@ -52,11 +55,19 @@ export default function Visits() {
       <PageTitle icon={NaturePeopleIcon} title="Visits" />
       <CustomerDetails />
 
-      {!!visits && (
+      {!!visits?.length && (
         <VisitGroup
           customerId={customerId}
           visits={visits?.filter((visit) => !visit?.datePaid)}
           label="Visits not yet invoiced:"
+        />
+      )}
+
+      {!!customerId && (
+        <MenuButton
+          to={`/Customers/${customerId}/Visits/${uuid()}/Edit`}
+          icon={AddIcon}
+          label="New Visit"
         />
       )}
 
