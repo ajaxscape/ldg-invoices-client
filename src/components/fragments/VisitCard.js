@@ -101,12 +101,17 @@ export function VisitCard({ editLink, customerId }) {
                   <FullAddress address={property.address} />
                 </>
               )}
-              {!!tasks?.length && (
+              <br />
+              {!!tasks?.length ? (
                 <>
-                  <br />
                   <VisitTaskTable
                     tasks={[...tasks, { taskName: 'Breaks', quantity: 0 }]}
                   />
+                </>
+              ) : (
+                <>
+                  <br />
+                  No tasks entered as yet
                 </>
               )}
             </CardContent>
