@@ -11,6 +11,7 @@ import { VisitDetails } from '../../fragments/VisitDetails'
 import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
+import ReceiptIcon from '@mui/icons-material/Receipt'
 
 function VisitGroup({ visits, label, customerId }) {
   return (
@@ -68,6 +69,14 @@ export default function Visits() {
           to={`/Customers/${customerId}/Visits/${uuid()}/Edit`}
           icon={AddIcon}
           label="New Visit"
+        />
+      )}
+
+      {!!visits?.length && !!customerId && (
+        <MenuButton
+          to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`}
+          icon={ReceiptIcon}
+          label="Generate Invoice"
         />
       )}
 
