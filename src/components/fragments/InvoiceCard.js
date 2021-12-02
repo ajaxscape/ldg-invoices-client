@@ -1,17 +1,14 @@
 import { Card, CardContent, Grid, IconButton } from '@mui/material'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
-import { useVisit } from '../context/VisitContext'
-import { FullAddress } from './FullAddress'
+import { useInvoice } from '../context/InvoiceContext'
 import { format } from 'date-fns'
 import formatName from '../../utilities/formatName'
 import { useData } from '../context/DataContext'
-import { VisitTaskTable } from './VisitTaskTable'
-import formatAddress from '../../utilities/formatAddress'
 
-const PREFIX = 'LdgApp-Visit-Details'
+const PREFIX = 'LdgApp-Invoice-Details'
 
 const classes = {
   card: `${PREFIX}-card`,
@@ -34,36 +31,23 @@ const Root = styled('div')(({ theme }) => ({
   },
 }))
 
-export function VisitCard({ editLink, customerId }) {
-  const { customerId: visitCustomerId } = useParams()
+export function InvoiceCard({ editLink, customerId }) {
+  // const { customerId: invoiceCustomerId } = useParams()
   const { getCustomerById } = useData()
-  const { property, tasks, visitDateTime } = useVisit()
-  const { startTime, finishTime } = visitDateTime || {}
+  const { visits, invoiceDate } = useInvoice()
   const [displayCard, setDisplayCard] = useState()
   const [fullName, setFullName] = useState('')
-  const [showAddress, setShowAddress] = useState(false)
 
   useEffect(() => {
-    if (!!startTime && startTime.toDateString() !== 'Invalid Date') {
+    if (!!invoiceDate && invoiceDate.toDateString() !== 'Invalid Date') {
       setDisplayCard(true)
     }
-  }, [startTime])
+  }, [invoiceDate])
 
   useEffect(() => {
     if (customerId && getCustomerById) {
       const customer = getCustomerById(customerId)
       setFullName(formatName(customer))
-      if (visitCustomerId) {
-        if (
-          formatAddress(customer.address) === formatAddress(property.address)
-        ) {
-          setShowAddress(false)
-        } else {
-          setShowAddress(true)
-        }
-      } else {
-        setShowAddress(true)
-      }
     }
   }, [customerId, getCustomerById])
 
@@ -74,14 +58,7 @@ export function VisitCard({ editLink, customerId }) {
           <Card className={classes.card}>
             <CardContent>
               <strong>
-                {!!startTime && (
-                  <>
-                    {format(startTime, 'dd MMMM yyyy')}
-                    <br />
-                    {format(startTime, 'h:mm a')} to{' '}
-                    {format(finishTime, 'h:mm a')}
-                  </>
-                )}
+                {!!invoiceDate && <>{format(invoiceDate, 'dd MMMM yyyy')}</>}
               </strong>
               {!!fullName && (
                 <>
@@ -90,30 +67,8 @@ export function VisitCard({ editLink, customerId }) {
                   {fullName},
                 </>
               )}
-              {!!property?.address && showAddress && (
-                <>
-                  {!fullName && (
-                    <>
-                      <br />
-                      <br />
-                    </>
-                  )}
-                  <FullAddress address={property.address} />
-                </>
-              )}
               <br />
-              {!!tasks?.length ? (
-                <>
-                  <VisitTaskTable
-                    tasks={[...tasks, { taskName: 'Breaks', quantity: 0 }]}
-                  />
-                </>
-              ) : (
-                <>
-                  <br />
-                  No tasks entered as yet
-                </>
-              )}
+              {!!visits?.length && <>No of visits: {visits.length}</>}
             </CardContent>
             <div className={classes.buttons}>
               {!!editLink && (

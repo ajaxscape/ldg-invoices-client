@@ -2,7 +2,7 @@ import { Grid } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NaturePeopleIcon from '@mui/icons-material/NaturePeople'
 import { PageTitle } from '../../fragments/PageTitle'
-import { useParams } from 'react-router-dom'
+import { Redirect, useParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
 import MenuGroup from '../../fragments/MenuGroup'
 import { CustomerDetails } from '../../fragments/CustomerDetails'
@@ -12,6 +12,7 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
 import ReceiptIcon from '@mui/icons-material/Receipt'
+import { StyledModal } from '../../fragments/StyledModal'
 
 function VisitGroup({ visits, label, customerId }) {
   return (
@@ -40,6 +41,9 @@ export default function Visits() {
   const { customerId } = useParams()
   const [visits, setVisits] = useState()
   const [prefix, setPrefix] = useState()
+  const [generateInvoice, setGenerateInvoice] = useState(false)
+  const [generateInvoiceModalOpen, setGenerateInvoiceModalOpen] =
+    useState(false)
 
   useEffect(() => {
     if (customerId) {
@@ -51,36 +55,61 @@ export default function Visits() {
     setVisits(getVisits({ customerId }))
   }, [getVisits, customerId])
 
+  const handleModalOpen = () => {
+    setGenerateInvoiceModalOpen(true)
+  }
+
+  const handleClose = () => {
+    setGenerateInvoiceModalOpen(false)
+  }
+
+  const handleGenerateInvoice = () => {
+    setGenerateInvoiceModalOpen(false)
+    setGenerateInvoice(true)
+  }
+
   return (
-    <Grid container direction="column" spacing={2} alignContent="stretch">
-      <PageTitle icon={NaturePeopleIcon} title="Visits" />
-      <CustomerDetails />
-
-      {!!visits?.length && (
-        <VisitGroup
-          customerId={customerId}
-          visits={visits?.filter((visit) => !visit?.datePaid)}
-          label="Visits not yet invoiced:"
-        />
+    <>
+      {!!generateInvoice && (
+        <Redirect to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`} />
       )}
+      <Grid container direction="column" spacing={2} alignContent="stretch">
+        <PageTitle icon={NaturePeopleIcon} title="Visits" />
+        <CustomerDetails />
 
-      {!!customerId && (
-        <MenuButton
-          to={`/Customers/${customerId}/Visits/${uuid()}/Edit`}
-          icon={AddIcon}
-          label="New Visit"
-        />
-      )}
+        {!!visits?.length && (
+          <VisitGroup
+            customerId={customerId}
+            visits={visits?.filter((visit) => !visit?.datePaid)}
+            label="Visits not yet invoiced:"
+          />
+        )}
 
-      {!!visits?.length && !!customerId && (
-        <MenuButton
-          to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`}
-          icon={ReceiptIcon}
-          label="Generate Invoice"
-        />
-      )}
+        {!!customerId && (
+          <>
+            <MenuButton
+              to={`/Customers/${customerId}/Visits/${uuid()}/Edit`}
+              icon={AddIcon}
+              label="New Visit"
+            />
+            {!!visits?.length && (
+              <MenuButton
+                onClick={handleModalOpen}
+                icon={ReceiptIcon}
+                label="Generate Invoice"
+              />
+            )}
+          </>
+        )}
 
-      <NavButtons backTo={prefix ?? '/Home'} />
-    </Grid>
+        <NavButtons backTo={prefix ?? '/Home'} />
+      </Grid>
+      <StyledModal
+        open={generateInvoiceModalOpen}
+        title="Are you sure you want to generate the invoice?"
+        onClickYes={handleGenerateInvoice}
+        onClickNo={handleClose}
+      />
+    </>
   )
 }

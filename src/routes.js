@@ -1,6 +1,5 @@
 import Home from './components/pages/Home'
 import Visits from './components/pages/Visits/Visits'
-import Visit from './components/pages/Visits/Visit'
 import Invoices from './components/pages/Invoices/Invoices'
 import Invoice from './components/pages/Invoices/Invoice'
 import Customers from './components/pages/Customers/Customers'
@@ -8,6 +7,7 @@ import Customer from './components/pages/Customers/Customer'
 import CustomerEdit from './components/pages/Customers/CustomerEdit/CustomerEdit'
 import Logout from './components/pages/Logout'
 import VisitEdit from './components/pages/Visits/VisitEdit/VisitEdit'
+import InvoiceEdit from './components/pages/Invoices/InvoiceEdit/InvoiceEdit'
 
 const routes = [
   {
@@ -23,22 +23,12 @@ const routes = [
     component: Visits,
     exact: true,
   },
-  {
-    path: 'Visits/:visitId',
-    component: Visit,
-    exact: true,
-  },
 
   // Invoices
   // ********
   {
     path: 'Invoices',
     component: Invoices,
-    exact: true,
-  },
-  {
-    path: `Invoices/:invoiceId`,
-    component: Invoice,
     exact: true,
   },
 
@@ -73,13 +63,13 @@ const routes = [
     exact: true,
   },
   {
-    path: `Customers/:customerId/Visits`,
-    component: Visits,
+    path: `Customers/:customerId/Invoices/:invoiceId/Edit`,
+    component: InvoiceEdit,
     exact: true,
   },
   {
-    path: `Customers/:customerId/Visits/:visitId`,
-    component: Visit,
+    path: `Customers/:customerId/Visits`,
+    component: Visits,
     exact: true,
   },
   {
