@@ -12,6 +12,7 @@ import SelectProperty from './SelectProperty'
 import VisitDateTimeEdit from './VisitDateTimeEdit'
 import VisitTasksEdit from './VisitTasksEdit'
 import VisitConfirmation from './VisitConfirmation'
+import NotFoundComponent from '../../NotFoundComponent'
 
 export default function VisitEdit() {
   let match = useRouteMatch()
@@ -37,11 +38,8 @@ export default function VisitEdit() {
         <Route path={`${match.path}/Save`} exact>
           <VisitSave {...params} />
         </Route>
-        <Redirect
-          from={match.path}
-          to={`${match.path}/Property/Select`}
-          exact
-        />
+        <Redirect from={match.path} to={`${match.url}/Property/Select`} exact />
+        <Route component={NotFoundComponent} />
       </Switch>
     </VisitProvider>
   )

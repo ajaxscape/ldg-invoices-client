@@ -10,6 +10,7 @@ import ContactEdit from './ContactEdit'
 import { PersonProvider } from '../../../context/PersonContext'
 import PersonAddressEdit from './PersonAddressEdit'
 import PersonSave from './PersonSave'
+import NotFoundComponent from '../../NotFoundComponent'
 
 export default function CustomerEdit() {
   let match = useRouteMatch()
@@ -29,7 +30,8 @@ export default function CustomerEdit() {
         <Route path={`${match.path}/Save`} exact>
           <PersonSave {...params} />
         </Route>
-        <Redirect from={match.path} to={`${match.path}/Name`} exact />
+        <Redirect from={match.path} to={`${match.url}/Name`} exact />
+        <Route component={NotFoundComponent} />
       </Switch>
     </PersonProvider>
   )

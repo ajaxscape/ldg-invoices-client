@@ -5,10 +5,11 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom'
-import InvoiceDetailsEdit from '../../Invoices/InvoiceEdit/InvoiceDetailsEdit'
-import InvoiceSave from '../../Invoices/InvoiceEdit/InvoiceSave'
+import InvoiceDetailsEdit from './InvoiceDetailsEdit'
+import InvoiceSave from './InvoiceSave'
+import InvoiceConfirmation from './InvoiceConfirmation'
 import { InvoiceProvider } from '../../../context/InvoiceContext'
-import InvoiceConfirmation from '../../Invoices/InvoiceEdit/InvoiceConfirmation'
+import NotFoundComponent from '../../NotFoundComponent'
 
 export default function InvoiceEdit() {
   let match = useRouteMatch()
@@ -25,7 +26,8 @@ export default function InvoiceEdit() {
         <Route path={`${match.path}/Save`} exact>
           <InvoiceSave {...params} />
         </Route>
-        <Redirect from={match.path} to={`${match.path}/InvoiceDetails`} exact />
+        <Redirect from={match.path} to={`${match.url}/InvoiceDetails`} exact />
+        <Route component={NotFoundComponent} />
       </Switch>
     </InvoiceProvider>
   )

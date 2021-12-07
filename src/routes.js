@@ -65,7 +65,6 @@ const routes = [
   {
     path: `Customers/:customerId/Invoices/:invoiceId/Edit`,
     component: InvoiceEdit,
-    exact: true,
   },
   {
     path: `Customers/:customerId/Visits`,

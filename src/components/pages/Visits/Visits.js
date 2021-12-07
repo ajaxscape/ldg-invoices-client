@@ -92,7 +92,7 @@ export default function Visits() {
               icon={AddIcon}
               label="New Visit"
             />
-            {!!visits?.length && (
+            {!!visits?.some(({ tasks = [] }) => tasks.length) && (
               <MenuButton
                 onClick={handleModalOpen}
                 icon={ReceiptIcon}

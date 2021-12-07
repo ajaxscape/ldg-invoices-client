@@ -13,7 +13,7 @@ import { Container } from '@mui/material'
 const Login = lazy(() => import('./components/pages/Login'))
 const ForgotPassword = lazy(() => import('./components/pages/ForgotPassword'))
 const NoFoundComponent = lazy(() =>
-  import('./components/pages/NoFoundComponent')
+  import('./components/pages/NotFoundComponent')
 )
 
 const PREFIX = 'LdgApp'

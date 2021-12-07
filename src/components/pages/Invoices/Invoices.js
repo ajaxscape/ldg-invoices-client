@@ -62,8 +62,6 @@ export default function Invoices() {
       <PageTitle icon={ReceiptIcon} title="Invoices" />
       <CustomerDetails />
 
-      <MenuButton to="/NewInvoice" icon={AddIcon} label="New Invoice" />
-
       <InvoiceGroup
         prefix={prefix}
         invoices={invoices?.filter((invoice) => !invoice?.datePaid)}
