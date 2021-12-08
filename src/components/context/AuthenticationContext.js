@@ -13,7 +13,7 @@ export const AuthenticationProvider = ({ children }) => {
   const [user, setUser] = useState()
 
   const isAuthenticated = () => {
-    return true // !!user
+    return !!user
   }
 
   const login = (credentials = {}) => {
