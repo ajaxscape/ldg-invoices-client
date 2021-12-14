@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles'
 import { useInvoice } from '../context/InvoiceContext'
 import { format } from 'date-fns'
 import formatName from '../../utilities/formatName'
+import formatCurrency from '../../utilities/formatCurrency'
 import { useData } from '../context/DataContext'
 
 const PREFIX = 'LdgApp-Invoice-Details'
@@ -69,6 +70,8 @@ export function InvoiceCard({ editLink, customerId }) {
               )}
               <br />
               {!!visits?.length && <>No of visits: {visits.length}</>}
+              <br />
+              Invoice total: {formatCurrency(invoiceTotal)}
             </CardContent>
             <div className={classes.buttons}>
               {!!editLink && (

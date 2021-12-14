@@ -13,7 +13,7 @@ export const InvoiceProvider = ({ children, invoiceId, customerId }) => {
 
   useEffect(() => {
     setVisits(getVisits({ customerId }))
-    setInvoiceDate(new Date(invoiceDate))
+    setInvoiceDate(() => (invoiceDate ? new Date(invoiceDate) : new Date()))
   }, [])
 
   useEffect(() => {
