@@ -1,18 +1,44 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useData } from './DataContext'
 
 export const InvoiceContext = React.createContext(undefined)
 
 export const useInvoice = () => useContext(InvoiceContext)
 
-const save = () => {}
-
 export const InvoiceProvider = ({ children, invoiceId, customerId }) => {
-  const [invoiceDateTime, setInvoiceDateTime] = useState({})
+  const [invoiceDate, setInvoiceDate] = useState()
+  const [invoiceTotal, setInvoiceTotal] = useState(0)
+  const [visits, setVisits] = useState()
+  const { getVisits } = useData()
+
+  useEffect(() => {
+    setVisits(getVisits({ customerId }))
+    setInvoiceDate(new Date(invoiceDate))
+  }, [])
+
+  useEffect(() => {
+    if (visits?.length) {
+      const invoiceTotal = visits.reduce((total, { tasks = [] }) => {
+        return (
+          total +
+          tasks.reduce((subTotal, { quantity, price }) => {
+            return subTotal + quantity * price
+          }, 0)
+        )
+      }, 0)
+      setInvoiceTotal(invoiceTotal)
+    }
+  }, [visits])
+
+  const save = () => {}
+
   return (
     <InvoiceContext.Provider
       value={{
-        setInvoiceDateTime,
-        invoiceDateTime,
+        setInvoiceDate,
+        invoiceDate,
+        invoiceTotal,
+        visits,
         save,
       }}
     >

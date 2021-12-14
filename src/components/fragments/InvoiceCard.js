@@ -34,7 +34,7 @@ const Root = styled('div')(({ theme }) => ({
 export function InvoiceCard({ editLink, customerId }) {
   // const { customerId: invoiceCustomerId } = useParams()
   const { getCustomerById } = useData()
-  const { visits, invoiceDate } = useInvoice()
+  const { visits, invoiceTotal, invoiceDate } = useInvoice()
   const [displayCard, setDisplayCard] = useState()
   const [fullName, setFullName] = useState('')
 

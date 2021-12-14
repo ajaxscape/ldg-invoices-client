@@ -8,8 +8,7 @@ import { InvoiceCard } from '../../../fragments/InvoiceCard'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 
 export default function InvoiceDetailsEdit({ customerId, invoiceId }) {
-  const { invoiceDateTime } = useInvoice()
-  const { invoiceDate } = invoiceDateTime || {}
+  const { invoiceDate } = useInvoice()
 
   let match = useRouteMatch()
 
