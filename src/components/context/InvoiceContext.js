@@ -9,7 +9,7 @@ export const InvoiceProvider = ({ children, invoiceId, customerId }) => {
   const [invoiceDate, setInvoiceDate] = useState()
   const [invoiceTotal, setInvoiceTotal] = useState(0)
   const [visits, setVisits] = useState()
-  const { getVisits } = useData()
+  const { getVisits, getInvoiceById } = useData()
 
   useEffect(() => {
     setVisits(getVisits({ customerId }))

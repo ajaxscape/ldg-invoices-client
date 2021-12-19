@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import formatName from '../../utilities/formatName'
 import formatCurrency from '../../utilities/formatCurrency'
 import { useData } from '../context/DataContext'
+import { VisitTaskTable } from './VisitTaskTable'
 
 const PREFIX = 'LdgApp-Invoice-Details'
 
@@ -37,6 +38,7 @@ export function InvoiceCard({ editLink, customerId }) {
   const { getCustomerById } = useData()
   const { visits, invoiceTotal, invoiceDate } = useInvoice()
   const [displayCard, setDisplayCard] = useState()
+  const [billPayerName, setBillPayerName] = useState('')
   const [fullName, setFullName] = useState('')
 
   useEffect(() => {
@@ -48,6 +50,9 @@ export function InvoiceCard({ editLink, customerId }) {
   useEffect(() => {
     if (customerId && getCustomerById) {
       const customer = getCustomerById(customerId)
+      if (customer.billPayer) {
+        setBillPayerName(formatName(customer.billPayer))
+      }
       setFullName(formatName(customer))
     }
   }, [customerId, getCustomerById])
@@ -65,13 +70,38 @@ export function InvoiceCard({ editLink, customerId }) {
                 <>
                   <br />
                   <br />
+                  {!!billPayerName && (
+                    <>
+                      {billPayerName}
+                      <br />
+                      c/o:{' '}
+                    </>
+                  )}
                   {fullName},
                 </>
               )}
               <br />
-              {!!visits?.length && <>No of visits: {visits.length}</>}
+              {!!visits?.length && (
+                <>
+                  {visits.map((visit) => (
+                    <>
+                      <br />
+                      {format(new Date(visit.visitDate), 'dd MMM yyyy')}
+                      {!!visit.tasks?.length && (
+                        <VisitTaskTable tasks={visit.tasks} />
+                      )}
+                    </>
+                  ))}
+                </>
+              )}
               <br />
-              Invoice total: {formatCurrency(invoiceTotal)}
+              {!!visits?.length && (
+                <>
+                  No of visits: <strong>{visits.length}</strong>
+                </>
+              )}
+              <br />
+              Invoice total: <strong>{formatCurrency(invoiceTotal)}</strong>
             </CardContent>
             <div className={classes.buttons}>
               {!!editLink && (
