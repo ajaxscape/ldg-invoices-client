@@ -25,7 +25,7 @@ export default function InvoiceSave({ customerId, invoiceId }) {
       {saved ? (
         <Redirect
           from={path}
-          to={path.substring(0, path.indexOf('/Invoices/') + 8)}
+          to={path.substring(0, path.lastIndexOf('/Edit/'))}
           exact
         />
       ) : (

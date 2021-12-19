@@ -1,6 +1,5 @@
 import { Grid } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import AddIcon from '@mui/icons-material/Add'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import { PageTitle } from '../../fragments/PageTitle'
 import { MenuButton } from '../../fragments/Buttons/MenuButton'

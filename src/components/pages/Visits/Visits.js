@@ -12,7 +12,6 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
 import ReceiptIcon from '@mui/icons-material/Receipt'
-import { StyledModal } from '../../fragments/StyledModal'
 
 function VisitGroup({ visits, label, customerId }) {
   return (
@@ -41,9 +40,6 @@ export default function Visits() {
   const { customerId } = useParams()
   const [visits, setVisits] = useState()
   const [prefix, setPrefix] = useState()
-  const [generateInvoice, setGenerateInvoice] = useState(false)
-  const [generateInvoiceModalOpen, setGenerateInvoiceModalOpen] =
-    useState(false)
 
   useEffect(() => {
     if (customerId) {
@@ -55,24 +51,8 @@ export default function Visits() {
     setVisits(getVisits({ customerId }))
   }, [getVisits, customerId])
 
-  const handleModalOpen = () => {
-    setGenerateInvoiceModalOpen(true)
-  }
-
-  const handleClose = () => {
-    setGenerateInvoiceModalOpen(false)
-  }
-
-  const handleGenerateInvoice = () => {
-    setGenerateInvoiceModalOpen(false)
-    setGenerateInvoice(true)
-  }
-
   return (
     <>
-      {!!generateInvoice && (
-        <Redirect to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`} />
-      )}
       <Grid container direction="column" spacing={2} alignContent="stretch">
         <PageTitle icon={NaturePeopleIcon} title="Visits" />
         <CustomerDetails />
@@ -94,7 +74,7 @@ export default function Visits() {
             />
             {!!visits?.some(({ tasks = [] }) => tasks.length) && (
               <MenuButton
-                onClick={handleModalOpen}
+                to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`}
                 icon={ReceiptIcon}
                 label="Generate Invoice"
               />
@@ -104,12 +84,6 @@ export default function Visits() {
 
         <NavButtons backTo={prefix ?? '/Home'} />
       </Grid>
-      <StyledModal
-        open={generateInvoiceModalOpen}
-        title="Are you sure you want to generate the invoice?"
-        onClickYes={handleGenerateInvoice}
-        onClickNo={handleClose}
-      />
     </>
   )
 }

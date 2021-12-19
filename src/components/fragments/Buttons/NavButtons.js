@@ -21,6 +21,7 @@ const Root = styled('div')(({ theme }) => ({
 export function NavButtons({
   backTo,
   continueTo,
+  continueClick,
   backLabel = 'Back',
   continueLabel = 'Continue',
   continueToDisabled,
@@ -50,9 +51,10 @@ export function NavButtons({
             id="continue-button"
             variant="contained"
             color="secondary"
-            component={Link}
+            component={!!continueClick ? null : Link}
+            onClick={!!continueClick ? continueClick : null}
             tabIndex={0}
-            to={continueTo}
+            to={!!continueClick ? null : continueTo}
             fullWidth={!backTo}
             size="large"
             disabled={continueToDisabled}

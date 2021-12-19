@@ -186,6 +186,10 @@ export const DataProvider = ({ children }) => {
     setCustomerToSave({ ...customer, visitsYetToBeInvoiced: visits })
   }
 
+  const saveInvoice = (customerId, invoiceToSave) => {
+    const customer = getCustomerById(customerId)
+  }
+
   useEffect(() => {
     if (customerToSave) {
       saveCustomer(customerToSave)
@@ -202,6 +206,7 @@ export const DataProvider = ({ children }) => {
         saveCustomer,
         getInvoices,
         getInvoiceById,
+        saveInvoice,
         getVisits,
         getVisitById,
         saveVisit,

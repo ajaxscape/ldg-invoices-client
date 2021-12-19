@@ -83,15 +83,17 @@ export function InvoiceCard({ editLink, customerId }) {
               <br />
               {!!visits?.length && (
                 <>
-                  {visits.map((visit) => (
-                    <>
-                      <br />
-                      {format(new Date(visit.visitDate), 'dd MMM yyyy')}
-                      {!!visit.tasks?.length && (
-                        <VisitTaskTable tasks={visit.tasks} />
-                      )}
-                    </>
-                  ))}
+                  {visits.map((visit) => {
+                    return (
+                      <div key={visit.id}>
+                        <br />
+                        {format(new Date(visit.visitDate), 'dd MMM yyyy')}
+                        {!!visit.tasks?.length && (
+                          <VisitTaskTable tasks={visit.tasks} />
+                        )}
+                      </div>
+                    )
+                  })}
                 </>
               )}
               <br />

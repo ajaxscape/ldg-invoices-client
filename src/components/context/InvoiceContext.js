@@ -9,7 +9,7 @@ export const InvoiceProvider = ({ children, invoiceId, customerId }) => {
   const [invoiceDate, setInvoiceDate] = useState()
   const [invoiceTotal, setInvoiceTotal] = useState(0)
   const [visits, setVisits] = useState()
-  const { getVisits, getInvoiceById } = useData()
+  const { getVisits, saveInvoice } = useData()
 
   useEffect(() => {
     setVisits(getVisits({ customerId }))
@@ -30,7 +30,9 @@ export const InvoiceProvider = ({ children, invoiceId, customerId }) => {
     }
   }, [visits])
 
-  const save = () => {}
+  const save = () => {
+    saveInvoice(customerId, {})
+  }
 
   return (
     <InvoiceContext.Provider
