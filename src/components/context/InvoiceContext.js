@@ -31,7 +31,11 @@ export const InvoiceProvider = ({ children, invoiceId, customerId }) => {
   }, [visits])
 
   const save = () => {
-    saveInvoice(customerId, {})
+    saveInvoice(customerId, {
+      id: invoiceId,
+      dateCreated: invoiceDate,
+      visits,
+    })
   }
 
   return (

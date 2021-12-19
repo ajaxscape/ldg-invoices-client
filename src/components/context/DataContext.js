@@ -187,7 +187,13 @@ export const DataProvider = ({ children }) => {
   }
 
   const saveInvoice = (customerId, invoiceToSave) => {
-    const customer = getCustomerById(customerId)
+    const { invoices = [], ...customer } = getCustomerById(customerId)
+    const visitIds = invoiceToSave.visits.map(({ id }) => id)
+    invoices.push(invoiceToSave)
+    customer.visitsYetToBeInvoiced = customer.visitsYetToBeInvoiced.filter(
+      ({ id }) => !visitIds.includes(id)
+    )
+    setCustomerToSave({ ...customer, invoices: [...invoices] })
   }
 
   useEffect(() => {
