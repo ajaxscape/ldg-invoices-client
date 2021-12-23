@@ -4,32 +4,51 @@ import React, { useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
 import { PageTitle } from '../../fragments/PageTitle'
 import ReceiptIcon from '@mui/icons-material/Receipt'
-import { styled } from '@mui/material/styles'
-import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
+import Loader from '../../fragments/Loader'
+import domPurify from 'dompurify'
 
-const PREFIX = 'LdgApp-View-Invoice'
+function PrintedInvoice({ invoiceNumber }) {
+  const [response, setResponse] = useState()
+  const url = `${process.env.REACT_APP_API}/invoice`
 
-const classes = {
-  scaledFrame: `${PREFIX}-scaled-frame`,
+  useEffect(() => {
+    if (invoiceNumber) {
+      fetch(`${url}/${invoiceNumber}`)
+        .then(function (response) {
+          // The API call was successful!
+          return response.text()
+        })
+        .then(function (html) {
+          // This is the HTML from our response as a text string
+          console.log(html)
+          return setResponse(html)
+        })
+        .catch(function (err) {
+          // There was an error
+          console.warn('Something went wrong.', err)
+        })
+    }
+  }, [invoiceNumber])
+
+  return (
+    <>
+      {!!response ? (
+        <div
+          dangerouslySetInnerHTML={{ __html: domPurify.sanitize(response) }}
+        />
+      ) : (
+        <Loader />
+      )}
+    </>
+  )
 }
-
-const Root = styled('object')(({}) => ({
-  [`.${classes.scaledFrame}`]: {
-    zoom: '1.00',
-    transform: 'scale(1.00)',
-    transformOrigin: '0 0',
-  },
-}))
 
 export default function Invoice() {
   const { getInvoiceById } = useData()
   const { customerId, invoiceId } = useParams()
   const [invoice, setInvoice] = useState()
   const [prefix, setPrefix] = useState()
-  const [pdfUrl, setPdfUrl] = useState()
-
-  const apiUrl = process.env.REACT_APP_API
 
   useEffect(() => {
     if (customerId) {
@@ -41,21 +60,12 @@ export default function Invoice() {
     setInvoice(getInvoiceById(invoiceId))
   }, [getInvoiceById, invoiceId])
 
-  useEffect(() => {
-    if (invoice) {
-      setPdfUrl(`${apiUrl}/pdf/${invoice?.invoiceNumber}.pdf`)
-    }
-  }, [invoice])
-
   return (
     <Grid container direction="column" spacing={2} alignContent="stretch">
       <PageTitle icon={ReceiptIcon} title="Invoice" />
-      <CustomerDetails />
-      <h1>{invoice?.invoiceNumber}</h1>
-      <Root data={pdfUrl} type="application/pdf">
-        <iframe className={classes.scaledFrame} src={pdfUrl} />
-      </Root>
-
+      {!!invoice?.invoiceNumber && (
+        <PrintedInvoice invoiceNumber={invoice.invoiceNumber} />
+      )}
       <NavButtons backTo={`${prefix ? prefix : ''}/Invoices`} />
     </Grid>
   )

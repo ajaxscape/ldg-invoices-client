@@ -7,7 +7,6 @@ import { Redirect, useRouteMatch } from 'react-router-dom'
 import { InvoiceCard } from '../../../fragments/InvoiceCard'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import { StyledModal } from '../../../fragments/StyledModal'
-import { v4 as uuid } from 'uuid'
 
 export default function InvoiceDetailsEdit({ customerId, invoiceId }) {
   const { invoiceDate } = useInvoice()

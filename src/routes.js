@@ -1,7 +1,7 @@
 import Home from './components/pages/Home'
 import Visits from './components/pages/Visits/Visits'
 import Invoices from './components/pages/Invoices/Invoices'
-import Invoice from './components/pages/Invoices/Invoice'
+import InvoiceNew from './components/pages/Invoices/Invoice'
 import Customers from './components/pages/Customers/Customers'
 import Customer from './components/pages/Customers/Customer'
 import CustomerEdit from './components/pages/Customers/CustomerEdit/CustomerEdit'
@@ -59,7 +59,7 @@ const routes = [
   },
   {
     path: `Customers/:customerId/Invoices/:invoiceId`,
-    component: Invoice,
+    component: InvoiceNew,
     exact: true,
   },
   {
