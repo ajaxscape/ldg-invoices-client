@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
 import { PageTitle } from '../../fragments/PageTitle'
 import ReceiptIcon from '@mui/icons-material/Receipt'
+import EmailIcon from '@mui/icons-material/Email'
+import PaymentIcon from '@mui/icons-material/Payment'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import Loader from '../../fragments/Loader'
 import domPurify from 'dompurify'
+import { MenuButton } from '../../fragments/Buttons/MenuButton'
 
 function PrintedInvoice({ invoiceNumber }) {
   const [response, setResponse] = useState()
@@ -60,11 +63,33 @@ export default function Invoice() {
     setInvoice(getInvoiceById(invoiceId))
   }, [getInvoiceById, invoiceId])
 
+  const handlePaid = () => {}
+
+  const handleSend = () => {}
+
   return (
     <Grid container direction="column" spacing={2} alignContent="stretch">
       <PageTitle icon={ReceiptIcon} title="Invoice" />
-      {!!invoice?.invoiceNumber && (
-        <PrintedInvoice invoiceNumber={invoice.invoiceNumber} />
+      {!!invoice ? (
+        <>
+          {!!invoice?.invoiceNumber && (
+            <PrintedInvoice invoiceNumber={invoice.invoiceNumber} />
+          )}
+          <MenuButton
+            onClick={handleSend}
+            icon={EmailIcon}
+            label={!invoice?.dateSent ? 'Send Invoice' : 'Resend Invoice'}
+          />
+          {!invoice?.datePaid && (
+            <MenuButton
+              onClick={handlePaid}
+              icon={PaymentIcon}
+              label="Accept Payment"
+            />
+          )}
+        </>
+      ) : (
+        <Loader />
       )}
       <NavButtons backTo={`${prefix ? prefix : ''}/Invoices`} />
     </Grid>

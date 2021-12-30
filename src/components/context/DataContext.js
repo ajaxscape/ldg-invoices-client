@@ -155,6 +155,15 @@ export const DataProvider = ({ children }) => {
     return customers
       .filter((customer) => !customerId || customer?.id === customerId)
       .flatMap(({ invoices }) => invoices)
+      .sort(({ invoice: invoiceA }, { invoice: invoiceB }) => {
+        if (invoiceA < invoiceB) {
+          return -1
+        }
+        if (invoiceA > invoiceB) {
+          return 1
+        }
+        return 0
+      })
   }
 
   const getInvoiceById = (invoiceId) => {
@@ -168,6 +177,17 @@ export const DataProvider = ({ children }) => {
       .flatMap(({ visitsYetToBeInvoiced, id }) =>
         visitsYetToBeInvoiced.map((visit) => ({ ...visit, customerId: id }))
       )
+      .sort((visitA, visitB) => {
+        const a = `${visitA.visitDate} ${visitA.startTime}`
+        const b = `${visitB.visitDate} ${visitB.startTime}`
+        if (a < b) {
+          return -1
+        }
+        if (a > b) {
+          return 1
+        }
+        return 0
+      })
   }
 
   const getVisitById = (visitId) => {
