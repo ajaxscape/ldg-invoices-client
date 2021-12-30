@@ -56,12 +56,7 @@ export function PersonCard({ isBillPayer, editLink, onDelete }) {
     setDeleteModelOpen(true)
   }
 
-  const handleClose = () => {
-    setDeleteModelOpen(false)
-  }
-
   const handleDelete = () => {
-    setDeleteModelOpen(false)
     onDelete()
   }
 
@@ -130,9 +125,9 @@ export function PersonCard({ isBillPayer, editLink, onDelete }) {
       </Grid>
       <StyledModal
         open={deleteModelOpen}
+        setOpen={setDeleteModelOpen}
         title="Are you sure you want to delete the customer's Bill Payer?"
         onClickYes={handleDelete}
-        onClickNo={handleClose}
       />
     </Root>
   )

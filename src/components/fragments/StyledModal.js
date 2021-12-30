@@ -1,5 +1,5 @@
 import { Box, Button, Modal } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 
 const style = {
   position: 'absolute',
@@ -20,7 +20,28 @@ const buttonsStyle = {
   justifyContent: 'space-around',
 }
 
-export function StyledModal({ open, onClose, title, onClickNo, onClickYes }) {
+export function StyledModal({
+  open,
+  setOpen,
+  onClose,
+  title,
+  onClickNo,
+  onClickYes,
+}) {
+  const handleNo = (event) => {
+    setOpen(false)
+    if (onClickNo) {
+      onClickNo(event)
+    }
+  }
+
+  const handleYes = (event) => {
+    setOpen(false)
+    if (onClickYes) {
+      onClickYes(event)
+    }
+  }
+
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -38,7 +59,7 @@ export function StyledModal({ open, onClose, title, onClickNo, onClickYes }) {
             color="secondary"
             tabIndex={0}
             size="large"
-            onClick={onClickYes}
+            onClick={handleYes}
           >
             Yes
           </Button>
@@ -49,7 +70,7 @@ export function StyledModal({ open, onClose, title, onClickNo, onClickYes }) {
             color="info"
             tabIndex={0}
             size="large"
-            onClick={onClickNo}
+            onClick={handleNo}
           >
             No
           </Button>

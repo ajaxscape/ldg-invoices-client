@@ -26,12 +26,10 @@ export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
   }
 
   const handleClose = () => {
-    setDeleteModelOpen(false)
     setCount((count) => count + 1)
   }
 
   const handleDelete = () => {
-    setDeleteModelOpen(false)
     onTaskSelect({ target })
   }
 
@@ -71,6 +69,7 @@ export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
       </Grid>
       <StyledModal
         open={deleteModelOpen}
+        setOpen={setDeleteModelOpen}
         title="Are you sure you want to remove this task?"
         onClickYes={handleDelete}
         onClickNo={handleClose}

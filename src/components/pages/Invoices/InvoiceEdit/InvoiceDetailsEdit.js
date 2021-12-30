@@ -28,12 +28,7 @@ export default function InvoiceDetailsEdit({ customerId, invoiceId }) {
     setGenerateInvoiceModalOpen(true)
   }
 
-  const handleClose = () => {
-    setGenerateInvoiceModalOpen(false)
-  }
-
   const handleGenerateInvoice = () => {
-    setGenerateInvoiceModalOpen(false)
     setGenerateInvoice(true)
   }
 
@@ -59,9 +54,9 @@ export default function InvoiceDetailsEdit({ customerId, invoiceId }) {
       </Grid>
       <StyledModal
         open={generateInvoiceModalOpen}
+        setOpen={setGenerateInvoiceModalOpen}
         title="Are you sure you want to generate the invoice?"
         onClickYes={handleGenerateInvoice}
-        onClickNo={handleClose}
       />
     </>
   )
