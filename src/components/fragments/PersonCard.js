@@ -17,7 +17,6 @@ const classes = {
   card: `${PREFIX}-card`,
   billPayer: `${PREFIX}-bill-payer`,
   buttons: `${PREFIX}-buttons`,
-  modal: `${PREFIX}-modal`,
 }
 
 const Root = styled('div')(({ theme }) => ({

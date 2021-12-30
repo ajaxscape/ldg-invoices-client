@@ -150,20 +150,30 @@ export const DataProvider = ({ children }) => {
     }
   }
 
+  const getCustomerByInvoiceId = (invoiceId) => {
+    if (customers?.length) {
+      return customers.find(({ invoices }) =>
+        invoices.some((invoice) => invoice.id === invoiceId)
+      )
+    }
+  }
+
+  const sort = (a, b) => {
+    if (a < b) {
+      return -1
+    }
+    if (a > b) {
+      return 1
+    }
+    return 0
+  }
+
   const getInvoices = (params = {}) => {
     const { customerId } = params
     return customers
       .filter((customer) => !customerId || customer?.id === customerId)
       .flatMap(({ invoices }) => invoices)
-      .sort(({ invoice: invoiceA }, { invoice: invoiceB }) => {
-        if (invoiceA < invoiceB) {
-          return -1
-        }
-        if (invoiceA > invoiceB) {
-          return 1
-        }
-        return 0
-      })
+      .sort(({ invoiceNumber: a }, { invoiceNumber: b }) => sort(a, b))
   }
 
   const getInvoiceById = (invoiceId) => {
@@ -177,17 +187,12 @@ export const DataProvider = ({ children }) => {
       .flatMap(({ visitsYetToBeInvoiced, id }) =>
         visitsYetToBeInvoiced.map((visit) => ({ ...visit, customerId: id }))
       )
-      .sort((visitA, visitB) => {
-        const a = `${visitA.visitDate} ${visitA.startTime}`
-        const b = `${visitB.visitDate} ${visitB.startTime}`
-        if (a < b) {
-          return -1
-        }
-        if (a > b) {
-          return 1
-        }
-        return 0
-      })
+      .sort((visitA, visitB) =>
+        sort(
+          `${visitA.visitDate} ${visitA.startTime}`,
+          `${visitB.visitDate} ${visitB.startTime}`
+        )
+      )
   }
 
   const getVisitById = (visitId) => {
@@ -207,9 +212,16 @@ export const DataProvider = ({ children }) => {
   }
 
   const saveInvoice = (customerId, invoiceToSave) => {
-    const { invoices = [], ...customer } = getCustomerById(customerId)
-    const visitIds = invoiceToSave.visits.map(({ id }) => id)
-    invoices.push(invoiceToSave)
+    const { invoices = [], ...customer } = customerId
+      ? getCustomerById(customerId)
+      : getCustomerByInvoiceId(invoiceToSave?.id)
+    const visitIds = invoiceToSave.visits?.map(({ id }) => id)
+    const invoiceIndex = invoices.findIndex(({ id }) => id === invoiceToSave.id)
+    if (invoiceIndex > -1) {
+      invoices[invoiceIndex] = invoiceToSave
+    } else {
+      invoices.push(invoiceToSave)
+    }
     customer.visitsYetToBeInvoiced = customer.visitsYetToBeInvoiced.filter(
       ({ id }) => !visitIds.includes(id)
     )
@@ -229,6 +241,7 @@ export const DataProvider = ({ children }) => {
         customers,
         taskTypes,
         getCustomerById,
+        getCustomerByInvoiceId,
         saveCustomer,
         getInvoices,
         getInvoiceById,
