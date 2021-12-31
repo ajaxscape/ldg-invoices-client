@@ -1,5 +1,5 @@
 import { Box, Button, Modal } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 
 const style = {
   position: 'absolute',
@@ -25,6 +25,8 @@ export function StyledModal({
   setOpen,
   onClose,
   title,
+  noLabel = 'No',
+  yesLabel = 'Yes',
   onClickNo,
   onClickYes,
 }) {
@@ -61,7 +63,7 @@ export function StyledModal({
             size="large"
             onClick={handleYes}
           >
-            Yes
+            {yesLabel}
           </Button>
           <Button
             sx={{ minWidth: '45%' }}
@@ -72,7 +74,7 @@ export function StyledModal({
             size="large"
             onClick={handleNo}
           >
-            No
+            {noLabel}
           </Button>
         </Box>
       </Box>

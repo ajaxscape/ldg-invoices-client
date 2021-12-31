@@ -8,37 +8,10 @@ import EmailIcon from '@mui/icons-material/Email'
 import PaymentIcon from '@mui/icons-material/Payment'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import Loader from '../../fragments/Loader'
-import domPurify from 'dompurify'
 import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { StyledModal } from '../../fragments/StyledModal'
-
-function PrintedInvoice({ invoiceNumber, setLoading }) {
-  const [response, setResponse] = useState()
-  const url = `${process.env.REACT_APP_API}/invoice`
-
-  useEffect(() => {
-    if (invoiceNumber) {
-      setLoading(true)
-      fetch(`${url}/${invoiceNumber}`)
-        .then((response) => response.text())
-        .then((html) => setResponse(html))
-        .catch((err) => console.warn('Something went wrong.', err))
-        .finally(() => setLoading(false))
-    }
-  }, [invoiceNumber])
-
-  return (
-    <>
-      {!!response ? (
-        <div
-          dangerouslySetInnerHTML={{ __html: domPurify.sanitize(response) }}
-        />
-      ) : (
-        <Loader />
-      )}
-    </>
-  )
-}
+import PrintedInvoice from '../../fragments/PrintedInvoice'
+import { format } from 'date-fns'
 
 export default function Invoice() {
   const { getInvoiceById, saveInvoice } = useData()
@@ -47,7 +20,9 @@ export default function Invoice() {
   const [prefix, setPrefix] = useState()
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
+  const [sendModalOpen, setSendModalOpen] = useState(false)
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [paymentTypeModalOpen, setPaymentTypeModalOpen] = useState(false)
   const sendUrl = `${process.env.REACT_APP_API}/email`
 
   useEffect(() => {
@@ -61,10 +36,28 @@ export default function Invoice() {
   }, [getInvoiceById, invoiceId])
 
   const handleSendRequest = () => {
-    setModalOpen(true)
+    setSendModalOpen(true)
   }
 
-  const handlePaid = () => {}
+  const handleAcceptPaymentRequest = () => {
+    setPaymentModalOpen(true)
+  }
+
+  const handleAcceptPayment = () => {
+    setPaymentTypeModalOpen(true)
+  }
+
+  const acceptPayment = (paymentType) => {
+    saveInvoice(customerId, {
+      ...invoice,
+      datePaid: format(Date.now(), 'yyyy-MM-dd'),
+      paymentType,
+    })
+  }
+
+  const handleAcceptCashPayment = () => acceptPayment('Cash')
+
+  const handleAcceptBACSPayment = () => acceptPayment('BACS')
 
   const handleSend = () => {
     setSending(true)
@@ -89,7 +82,13 @@ export default function Invoice() {
 
   return (
     <>
-      <Grid container direction="column" spacing={2} alignContent="stretch">
+      <Grid
+        key={`paid-${invoice?.updatedAt || ''}`}
+        container
+        direction="column"
+        spacing={2}
+        alignContent="stretch"
+      >
         <PageTitle icon={ReceiptIcon} title="Invoice" />
         {!!invoice && !sending ? (
           <>
@@ -110,7 +109,7 @@ export default function Invoice() {
                     />
                     {!invoice?.datePaid && (
                       <MenuButton
-                        onClick={handlePaid}
+                        onClick={handleAcceptPaymentRequest}
                         icon={PaymentIcon}
                         label="Accept Payment"
                       />
@@ -126,10 +125,25 @@ export default function Invoice() {
         <NavButtons backTo={`${prefix ? prefix : ''}/Invoices`} />
       </Grid>
       <StyledModal
-        open={modalOpen}
-        setOpen={setModalOpen}
+        open={sendModalOpen}
+        setOpen={setSendModalOpen}
         title="Are you sure you want to send the invoice?"
         onClickYes={handleSend}
+      />
+      <StyledModal
+        open={paymentModalOpen}
+        setOpen={setPaymentModalOpen}
+        title="Are you sure you want to accept payment of the invoice?"
+        onClickYes={handleAcceptPayment}
+      />
+      <StyledModal
+        open={paymentTypeModalOpen}
+        setOpen={setPaymentTypeModalOpen}
+        title="Please select the type of payment"
+        noLabel="BACS"
+        onClickNo={handleAcceptBACSPayment}
+        yesLabel="CASH"
+        onClickYes={handleAcceptCashPayment}
       />
     </>
   )
