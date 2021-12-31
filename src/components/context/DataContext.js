@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import useFetch from 'react-fetch-hook'
 import { v4 as uuid } from 'uuid'
+import { sort } from '../../utilities/sort'
 
 export const DataContext = React.createContext(undefined)
 
@@ -158,22 +159,14 @@ export const DataProvider = ({ children }) => {
     }
   }
 
-  const sort = (a, b) => {
-    if (a < b) {
-      return -1
-    }
-    if (a > b) {
-      return 1
-    }
-    return 0
-  }
-
   const getInvoices = (params = {}) => {
     const { customerId } = params
     return customers
       .filter((customer) => !customerId || customer?.id === customerId)
       .flatMap(({ invoices }) => invoices)
-      .sort(({ invoiceNumber: a }, { invoiceNumber: b }) => sort(a, b))
+      .sort((invoiceA, invoiceB) =>
+        sort(invoiceA.invoiceNumber, invoiceB.invoiceNumber)
+      )
   }
 
   const getInvoiceById = (invoiceId) => {

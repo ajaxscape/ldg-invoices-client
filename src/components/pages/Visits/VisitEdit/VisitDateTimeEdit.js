@@ -3,7 +3,7 @@ import { dateTimeFields } from '../../../../constants/fields'
 import VisitEditView from './VisitEditView'
 import { useVisit } from '../../../context/VisitContext'
 import { Grid, Typography } from '@mui/material'
-import VisitTasks from './VisitTasks'
+import VisitTasks from '../../../fragments/VisitTasks'
 
 export default function VisitDateTimeEdit(params) {
   const {

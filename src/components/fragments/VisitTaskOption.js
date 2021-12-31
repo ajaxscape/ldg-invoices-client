@@ -1,13 +1,14 @@
-import { Grid } from '@mui/material'
+import { Grid, IconButton } from '@mui/material'
 import FormField from './FormField'
 import React, { useState } from 'react'
 import { StyledModal } from './StyledModal'
+import DeleteIcon from '@mui/icons-material/Delete'
+import FormLabel from '@mui/material/FormLabel'
 
-export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
-  const { taskName, id, selected, hours, minutes } = taskOption
+export function VisitTaskOption({ taskOption, onDelete, onChange }) {
+  const { taskName, id, taskType, hours, minutes, description, price } =
+    taskOption
   const [deleteModelOpen, setDeleteModelOpen] = useState(false)
-  const [count, setCount] = useState(0)
-  const [target, setTarget] = useState()
 
   const buildOptions = (options) => {
     return options.map((value) => ({
@@ -16,35 +17,29 @@ export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
     }))
   }
 
-  const handleTaskSelect = ({ target }) => {
-    if (target.checked) {
-      onTaskSelect({ target })
-    } else {
-      setTarget(target)
-      setDeleteModelOpen(true)
-    }
-  }
-
-  const handleClose = () => {
-    setCount((count) => count + 1)
+  const handleDeleteRequest = () => {
+    setDeleteModelOpen(true)
   }
 
   const handleDelete = () => {
-    onTaskSelect({ target })
+    onDelete(taskOption)
   }
 
   return (
     <>
       <Grid item xs={12} sm={6} md={4}>
-        <FormField
-          key={`task-checkbox-${count}`}
-          type="checkbox"
-          name={id}
-          label={taskName}
-          value={!!selected}
-          onChange={handleTaskSelect}
-        />
-        {!!selected && (
+        <FormLabel>{taskName}:</FormLabel>
+        <IconButton
+          id={`${id}-delete`}
+          variant="contained"
+          color={'primary'}
+          onClick={handleDeleteRequest}
+          tabIndex={0}
+        >
+          <DeleteIcon />
+        </IconButton>
+        <br />
+        {!!taskType ? (
           <>
             <FormField
               type="select"
@@ -52,7 +47,7 @@ export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
               label="hours"
               value={hours}
               options={buildOptions([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])}
-              onChange={onChangeTime}
+              onChange={onChange}
               fullWidth={false}
             />
             <FormField
@@ -61,8 +56,27 @@ export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
               label="minutes"
               value={minutes}
               options={buildOptions([0, 15, 30, 45])}
-              onChange={onChangeTime}
+              onChange={onChange}
               fullWidth={false}
+            />
+          </>
+        ) : (
+          <>
+            <FormField
+              name={`${id}-description`}
+              label="Description"
+              value={description}
+              onChange={onChange}
+              type="text"
+            />
+            <br />
+            <br />
+            <FormField
+              name={`${id}-price`}
+              label="Price"
+              value={price}
+              onChange={onChange}
+              type="text"
             />
           </>
         )}
@@ -72,7 +86,6 @@ export function VisitTaskOption({ taskOption, onTaskSelect, onChangeTime }) {
         setOpen={setDeleteModelOpen}
         title="Are you sure you want to remove this task?"
         onClickYes={handleDelete}
-        onClickNo={handleClose}
       />
     </>
   )
