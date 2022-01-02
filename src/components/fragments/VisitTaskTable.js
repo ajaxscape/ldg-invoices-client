@@ -12,7 +12,7 @@ function VisitTaskRow({ task }) {
         <TableRow>
           <TableCell style={{ padding: 0, maxWidth: '6em' }} align="left">
             {task.taskType ? task.taskName : task.description}
-            {!!task.description && (
+            {!!task.description && task.taskType && (
               <>
                 <br />
                 <em>{task.description}</em>
