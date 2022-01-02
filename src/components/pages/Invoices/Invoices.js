@@ -70,7 +70,7 @@ export default function Invoices() {
       <InvoiceGroup
         prefix={prefix}
         invoices={invoices?.filter((invoice) => !!invoice?.datePaid)}
-        label="Paid Invoices:"
+        label="Recent paid Invoices:"
       />
 
       <NavButtons backTo={prefix ?? '/Home'} />
