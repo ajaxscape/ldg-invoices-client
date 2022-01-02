@@ -38,7 +38,7 @@ export function VisitCard({ editLink, customerId }) {
   const { customerId: visitCustomerId } = useParams()
   const { getCustomerById } = useData()
   const { property, tasks, visitDateTime } = useVisit()
-  const { startTime, finishTime } = visitDateTime || {}
+  const { visitDate, startTime, finishTime } = visitDateTime || {}
   const [displayCard, setDisplayCard] = useState()
   const [fullName, setFullName] = useState('')
   const [showAddress, setShowAddress] = useState(false)
@@ -74,9 +74,9 @@ export function VisitCard({ editLink, customerId }) {
           <Card className={classes.card}>
             <CardContent>
               <strong>
-                {!!startTime && (
+                {!!visitDate && (
                   <>
-                    {format(startTime, 'dd MMMM yyyy')}
+                    {format(visitDate, 'dd MMMM yyyy')}
                     <br />
                     {format(startTime, 'h:mm a')} to{' '}
                     {format(finishTime, 'h:mm a')}

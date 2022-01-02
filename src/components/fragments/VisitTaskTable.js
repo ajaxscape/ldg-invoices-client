@@ -12,6 +12,12 @@ function VisitTaskRow({ task }) {
         <TableRow>
           <TableCell style={{ padding: 0, maxWidth: '6em' }} align="left">
             {task.taskType ? task.taskName : task.description}
+            {!!task.description && (
+              <>
+                <br />
+                <em>{task.description}</em>
+              </>
+            )}
           </TableCell>
           <TableCell style={{ padding: 0 }} align="right">
             {task.quantity && task.taskType ? task.quantity.toFixed(2) : ''}

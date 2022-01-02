@@ -59,6 +59,15 @@ export function VisitTaskOption({ taskOption, onDelete, onChange }) {
               onChange={onChange}
               fullWidth={false}
             />
+            <br />
+            <br />
+            <FormField
+              name={`${id}-description`}
+              label="Description"
+              value={description}
+              onChange={onChange}
+              type="text"
+            />
           </>
         ) : (
           <>
