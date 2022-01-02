@@ -1,20 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useData } from './DataContext'
 import { format } from 'date-fns'
+import nearestDateTime from '../../utilities/nearestDateTime'
 
 export const VisitContext = React.createContext(undefined)
 
 export const useVisit = () => useContext(VisitContext)
-
-function nearest(minutes) {
-  const nowInMinutes = Math.round(Date.now().valueOf() / 60000)
-  let base = nowInMinutes - (nowInMinutes % minutes)
-  const diffInMinutes = nowInMinutes - base
-  if (diffInMinutes > minutes / 2) {
-    base += minutes
-  }
-  return new Date(base * 60000)
-}
 
 export const VisitProvider = ({ children, visitId, customerId }) => {
   const [visitCustomerId, setVisitCustomerId] = useState()
@@ -46,9 +37,9 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
       setVisitCustomerId(visit.customerId)
     } else {
       setVisitDateTime({
-        visitDate: nearest(15),
-        startTime: nearest(15),
-        finishTime: nearest(15),
+        visitDate: nearestDateTime(15),
+        startTime: nearestDateTime(15),
+        finishTime: nearestDateTime(15),
       })
       // Now get first property from customer as default
       if (customerId) {
@@ -141,7 +132,6 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
         totalHours,
         timeWorked,
         timeRested,
-        nearest,
         save,
       }}
     >

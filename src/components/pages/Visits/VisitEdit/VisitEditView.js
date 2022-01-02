@@ -6,7 +6,7 @@ import FormField from '../../../fragments/FormField'
 import { NavButtons } from '../../../fragments/Buttons/NavButtons'
 import { useRouteMatch } from 'react-router-dom'
 import MenuGroup from '../../../fragments/MenuGroup'
-import { useVisit } from '../../../context/VisitContext'
+import nearestDateTime from '../../../../utilities/nearestDateTime'
 
 export default function VisitEditView({
   children,
@@ -20,7 +20,6 @@ export default function VisitEditView({
   prev,
   error,
 }) {
-  const { nearest } = useVisit()
   let match = useRouteMatch()
 
   const path = match.path
@@ -59,7 +58,7 @@ export default function VisitEditView({
                     type={type}
                     options={options}
                     minutesStep={roundedMinutes}
-                    maxDate={nowOrPast ? nearest(roundedMinutes) : null}
+                    maxDate={nowOrPast ? nearestDateTime(roundedMinutes) : null}
                   />
                 </Grid>
               )

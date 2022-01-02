@@ -98,7 +98,7 @@ export default function Invoice() {
                   setLoading={setLoading}
                   invoiceNumber={invoice.invoiceNumber}
                 />
-                {!loading && (
+                {!loading ? (
                   <>
                     <MenuButton
                       onClick={handleSendRequest}
@@ -115,6 +115,8 @@ export default function Invoice() {
                       />
                     )}
                   </>
+                ) : (
+                  <Loader />
                 )}
               </>
             )}
