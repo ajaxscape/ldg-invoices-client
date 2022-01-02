@@ -14,8 +14,9 @@ import PrintedInvoice from '../../fragments/PrintedInvoice'
 import { format } from 'date-fns'
 
 export default function Invoice() {
-  const { getInvoiceById, saveInvoice } = useData()
+  const { getInvoiceById, saveInvoice, getCustomerByInvoiceId } = useData()
   const { customerId, invoiceId } = useParams()
+  const [billPayer, setBillPayer] = useState()
   const [invoice, setInvoice] = useState()
   const [prefix, setPrefix] = useState()
   const [sending, setSending] = useState(false)
@@ -34,6 +35,16 @@ export default function Invoice() {
   useEffect(() => {
     setInvoice(getInvoiceById(invoiceId))
   }, [getInvoiceById, invoiceId])
+
+  useEffect(() => {
+    if (invoice?.updatedAt) {
+      const customer = getCustomerByInvoiceId(invoiceId)
+      const billPayer = customer?.billPayer || customer
+      if (billPayer) {
+        setBillPayer(billPayer)
+      }
+    }
+  }, [invoice?.updatedAt])
 
   const handleSendRequest = () => {
     setSendModalOpen(true)
@@ -100,13 +111,15 @@ export default function Invoice() {
                 />
                 {!loading ? (
                   <>
-                    <MenuButton
-                      onClick={handleSendRequest}
-                      icon={EmailIcon}
-                      label={
-                        !invoice?.dateSent ? 'Send Invoice' : 'Resend Invoice'
-                      }
-                    />
+                    {!!billPayer?.email && (
+                      <MenuButton
+                        onClick={handleSendRequest}
+                        icon={EmailIcon}
+                        label={
+                          !invoice?.dateSent ? 'Send Invoice' : 'Resend Invoice'
+                        }
+                      />
+                    )}
                     {!invoice?.datePaid && (
                       <MenuButton
                         onClick={handleAcceptPaymentRequest}
