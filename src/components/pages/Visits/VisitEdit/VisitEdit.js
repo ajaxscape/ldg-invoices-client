@@ -5,12 +5,10 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom'
-import VisitAddressEdit from './VisitAddressEdit'
 import VisitSave from './VisitSave'
 import { VisitProvider } from '../../../context/VisitContext'
 import SelectProperty from './SelectProperty'
 import VisitDateTimeEdit from './VisitDateTimeEdit'
-import VisitTasksEdit from './VisitTasksEdit'
 import VisitConfirmation from './VisitConfirmation'
 import NotFoundComponent from '../../NotFoundComponent'
 
@@ -25,12 +23,6 @@ export default function VisitEdit() {
         </Route>
         <Route path={`${match.path}/VisitDateTime`} exact>
           <VisitDateTimeEdit {...params} />
-        </Route>
-        <Route path={`${match.path}/Address`} exact>
-          <VisitAddressEdit {...params} />
-        </Route>
-        <Route path={`${match.path}/Tasks`} exact>
-          <VisitTasksEdit {...params} />
         </Route>
         <Route path={`${match.path}/Confirmation`} exact>
           <VisitConfirmation {...params} />

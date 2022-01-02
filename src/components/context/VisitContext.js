@@ -94,6 +94,7 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
     if (Array.isArray(tasks)) {
       const totals = tasks
         ?.filter(({ isMarkedForDeletion }) => !isMarkedForDeletion)
+        .filter(({ taskType }) => !!taskType)
         .reduce(
           ({ total, totalHours }, task) => {
             return {

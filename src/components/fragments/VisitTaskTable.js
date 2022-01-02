@@ -11,10 +11,10 @@ function VisitTaskRow({ task }) {
       {task?.quantity ? (
         <TableRow>
           <TableCell style={{ padding: 0, maxWidth: '6em' }} align="left">
-            {task.taskName}
+            {task.taskType ? task.taskName : task.description}
           </TableCell>
           <TableCell style={{ padding: 0 }} align="right">
-            {task.quantity ? task.quantity.toFixed(2) : ''}
+            {task.quantity && task.taskType ? task.quantity.toFixed(2) : ''}
           </TableCell>
           <TableCell style={{ padding: 0 }} align="right">
             {task.price ? ccyFormat(task.price * task.quantity) : ''}
@@ -44,9 +44,16 @@ export function VisitTaskTable({ tasks }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {tasks.map((task) => (
-            <VisitTaskRow key={`task-${task.id}`} task={task} />
-          ))}
+          {tasks
+            .filter(({ taskType }) => !!taskType)
+            .map((task) => (
+              <VisitTaskRow key={`task-${task.id}`} task={task} />
+            ))}
+          {tasks
+            .filter(({ taskType }) => !taskType)
+            .map((task) => (
+              <VisitTaskRow key={`task-${task.id}`} task={task} />
+            ))}
           <TableRow>
             <TableCell
               style={{ padding: 0, fontWeight: 'bold' }}
