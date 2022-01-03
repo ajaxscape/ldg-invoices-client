@@ -23,10 +23,12 @@ export default function Invoice() {
   const [prefix, setPrefix] = useState()
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [filename, setFilename] = useState()
   const [sendModalOpen, setSendModalOpen] = useState(false)
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
   const [paymentTypeModalOpen, setPaymentTypeModalOpen] = useState(false)
   const sendUrl = `${process.env.REACT_APP_API}/email`
+  const pdfUrl = `${process.env.REACT_APP_API}/pdf`
 
   useEffect(() => {
     if (customerId) {
@@ -47,6 +49,14 @@ export default function Invoice() {
       }
     }
   }, [invoice?.updatedAt])
+
+  useEffect(() => {
+    if (invoice?.invoiceNumber) {
+      fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`).then(() =>
+        setFilename(`${invoice.invoiceNumber}.pdf`)
+      )
+    }
+  }, [invoice?.invoiceNumber])
 
   const handleSendRequest = () => {
     setSendModalOpen(true)
@@ -127,6 +137,18 @@ export default function Invoice() {
                             {invoice.paymentType})
                             <br />
                           </>
+                        )}
+                        {!!filename && (
+                          <Grid item xs={12}>
+                            Download:{' '}
+                            <a
+                              href={`${pdfUrl}/${filename}`}
+                              download={filename}
+                              target="_blank"
+                            >
+                              {filename}
+                            </a>
+                          </Grid>
                         )}
                       </Typography>
                     </Grid>
