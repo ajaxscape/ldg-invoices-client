@@ -1,7 +1,7 @@
 import { useData } from '../../context/DataContext'
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import { Grid } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { PageTitle } from '../../fragments/PageTitle'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import EmailIcon from '@mui/icons-material/Email'
@@ -12,6 +12,8 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { StyledModal } from '../../fragments/StyledModal'
 import PrintedInvoice from '../../fragments/PrintedInvoice'
 import { format } from 'date-fns'
+
+const formatDate = (date) => format(new Date(date), 'dd MMMM yyyy')
 
 export default function Invoice() {
   const { getInvoiceById, saveInvoice, getCustomerByInvoiceId } = useData()
@@ -111,6 +113,23 @@ export default function Invoice() {
                 />
                 {!loading ? (
                   <>
+                    <Grid item xs={12}>
+                      <Typography variant="h6" paddingY paddingX>
+                        {!!invoice?.dateSent && (
+                          <>
+                            Sent: {formatDate(invoice.dateSent)}
+                            <br />
+                          </>
+                        )}
+                        {!!invoice?.datePaid && (
+                          <>
+                            Paid: {formatDate(invoice.datePaid)} (
+                            {invoice.paymentType})
+                            <br />
+                          </>
+                        )}
+                      </Typography>
+                    </Grid>
                     {!!billPayer?.email && (
                       <MenuButton
                         onClick={handleSendRequest}
