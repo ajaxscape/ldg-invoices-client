@@ -16,6 +16,7 @@ export default function VisitDateTimeEdit(params) {
     totalHours,
   } = useVisit()
   const [error, setError] = useState('')
+  const [warning, setWarning] = useState('')
 
   useEffect(() => {
     if (durationInMinutes && durationInMinutes < 0) {
@@ -29,6 +30,16 @@ export default function VisitDateTimeEdit(params) {
     }
   }, [totalHours, durationInMinutes])
 
+  useEffect(() => {
+    if (totalHours === durationInMinutes / 60) {
+      setWarning('')
+    } else {
+      setWarning(
+        `Is it ok to continue with ${timeRested} unaccounted (possibly a break) time?`
+      )
+    }
+  }, [timeRested])
+
   return (
     <VisitEditView
       {...params}
@@ -38,6 +49,7 @@ export default function VisitDateTimeEdit(params) {
       data={visitDateTime}
       setData={setVisitDateTime}
       error={error}
+      warning={warning}
     >
       <VisitTasks />
       <Grid item xs={12}>
@@ -45,10 +57,10 @@ export default function VisitDateTimeEdit(params) {
           Time worked: {timeWorked}
         </Typography>
         <Typography variant="h6" paddingY paddingX>
-          Breaks: {timeRested}
+          Length of visit: {duration}
         </Typography>
         <Typography variant="h6" paddingY paddingX>
-          Length of visit: {duration}
+          Unaccounted time: {timeRested}
         </Typography>
       </Grid>
     </VisitEditView>

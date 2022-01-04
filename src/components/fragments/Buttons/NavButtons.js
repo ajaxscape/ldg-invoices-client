@@ -38,13 +38,13 @@ export function NavButtons({
             component={Link}
             tabIndex={0}
             to={backTo}
-            fullWidth={!continueTo}
+            fullWidth={!continueTo && !continueClick}
             size="large"
           >
             {backLabel}
           </Button>
         )}
-        {!!continueTo && (
+        {(!!continueTo || !!continueClick) && (
           <Button
             className={!!backTo && classes.continueButton}
             endIcon={<ArrowForwardIosIcon />}
