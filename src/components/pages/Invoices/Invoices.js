@@ -8,6 +8,7 @@ import { useData } from '../../context/DataContext'
 import MenuGroup from '../../fragments/MenuGroup'
 import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
+import { sort } from '../../../utilities/sort'
 
 function InvoiceRow({ invoice, prefix }) {
   const { id = '', invoiceNumber = '' } = invoice || {}
@@ -27,13 +28,15 @@ function InvoiceGroup({ invoices, label, prefix }) {
     <>
       {!!invoices?.length && (
         <MenuGroup label={label}>
-          {invoices.map((invoice) => (
-            <InvoiceRow
-              key={`invoice-${invoice.id}`}
-              invoice={invoice}
-              prefix={prefix}
-            />
-          ))}
+          {invoices
+            .sort(({ invoiceNumber: a }, { invoiceNumber: b }) => sort(b, a))
+            .map((invoice) => (
+              <InvoiceRow
+                key={`invoice-${invoice.id}`}
+                invoice={invoice}
+                prefix={prefix}
+              />
+            ))}
         </MenuGroup>
       )}
     </>

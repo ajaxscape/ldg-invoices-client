@@ -9,6 +9,7 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import MenuGroup from '../../fragments/MenuGroup'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { v4 as uuid } from 'uuid'
+import { sort } from '../../../utilities/sort'
 
 function ViewCustomerRow({ customer }) {
   const { id = '', title = '', firstName = '', lastName = '' } = customer || {}
@@ -31,12 +32,19 @@ export default function Customers() {
 
       {!!customers?.length && (
         <MenuGroup label="Active customers:">
-          {customers.map((customer) => (
-            <ViewCustomerRow
-              key={`customer-${customer.id}`}
-              customer={customer}
-            />
-          ))}{' '}
+          {customers
+            .sort(
+              (
+                { firstName: fa, lastName: la },
+                { firstName: fb, lastName: lb }
+              ) => sort(`${fa}--${la}`, `${fb}--${lb}`)
+            )
+            .map((customer) => (
+              <ViewCustomerRow
+                key={`customer-${customer.id}`}
+                customer={customer}
+              />
+            ))}{' '}
         </MenuGroup>
       )}
 
