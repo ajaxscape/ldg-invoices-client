@@ -47,16 +47,13 @@ export default function Invoice() {
       if (billPayer) {
         setBillPayer(billPayer)
       }
+      if (invoice?.invoiceNumber) {
+        fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`).then(() =>
+          setFilename(`${invoice.invoiceNumber}.pdf`)
+        )
+      }
     }
   }, [invoice?.updatedAt])
-
-  useEffect(() => {
-    if (invoice?.invoiceNumber) {
-      fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`).then(() =>
-        setFilename(`${invoice.invoiceNumber}.pdf`)
-      )
-    }
-  }, [invoice?.invoiceNumber])
 
   const handleSendRequest = () => {
     setSendModalOpen(true)
