@@ -22,6 +22,7 @@ export default function Invoice() {
   const [invoice, setInvoice] = useState()
   const [prefix, setPrefix] = useState()
   const [sending, setSending] = useState(false)
+  const [paying, setPaying] = useState(false)
   const [loading, setLoading] = useState(false)
   const [filename, setFilename] = useState()
   const [sendModalOpen, setSendModalOpen] = useState(false)
@@ -48,9 +49,9 @@ export default function Invoice() {
         setBillPayer(billPayer)
       }
       if (invoice?.invoiceNumber) {
-        fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`).then(() =>
+        fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`).then(() => {
           setFilename(`${invoice.invoiceNumber}.pdf`)
-        )
+        })
       }
     }
   }, [invoice?.updatedAt])
@@ -68,11 +69,15 @@ export default function Invoice() {
   }
 
   const acceptPayment = (paymentType) => {
+    setPaying(true)
     saveInvoice(customerId, {
       ...invoice,
       datePaid: format(Date.now(), 'yyyy-MM-dd'),
       paymentType,
     })
+    setTimeout(() => {
+      setPaying(false)
+    }, 500)
   }
 
   const handleAcceptCashPayment = () => acceptPayment('Cash')
@@ -110,14 +115,17 @@ export default function Invoice() {
         alignContent="stretch"
       >
         <PageTitle icon={ReceiptIcon} title="Invoice" />
-        {!!invoice && !sending ? (
+        {!!invoice && !sending && !paying ? (
           <>
             {!!invoice?.invoiceNumber && (
               <>
-                <PrintedInvoice
-                  setLoading={setLoading}
-                  invoiceNumber={invoice.invoiceNumber}
-                />
+                {!paying && (
+                  <PrintedInvoice
+                    setLoading={setLoading}
+                    invoiceNumber={invoice.invoiceNumber}
+                  />
+                )}
+
                 {!loading ? (
                   <>
                     <Grid item xs={12}>
