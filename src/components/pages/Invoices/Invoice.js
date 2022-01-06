@@ -77,7 +77,7 @@ export default function Invoice() {
     })
     setTimeout(() => {
       setPaying(false)
-    }, 500)
+    }, 1000)
   }
 
   const handleAcceptCashPayment = () => acceptPayment('Cash')
