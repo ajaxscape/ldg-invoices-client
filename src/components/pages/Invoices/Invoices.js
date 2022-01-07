@@ -10,6 +10,22 @@ import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { sort } from '../../../utilities/sort'
 
+const getMostRecentlyPaidInvoices = (invoices, max) => {
+  return (
+    invoices
+      .filter(
+        // Invoices that have been paid
+        ({ datePaid }) => datePaid
+      )
+      // Only the latest 10
+      .sort(({ datePaid: a }, { datePaid: b }) => sort(a, b))
+      .slice(invoices.length > max ? invoices.length - max : 0)
+  )
+}
+
+const getUnpaidInvoices = (invoices) =>
+  invoices.filter(({ datePaid }) => !datePaid)
+
 function InvoiceRow({ invoice, prefix }) {
   const { id = '', invoiceNumber = '' } = invoice || {}
 
@@ -46,7 +62,7 @@ function InvoiceGroup({ invoices, label, prefix }) {
 export default function Invoices() {
   const { getInvoices } = useData()
   const { customerId } = useParams()
-  const [invoices, setInvoices] = useState()
+  const [invoices, setInvoices] = useState([])
   const [prefix, setPrefix] = useState()
 
   useEffect(() => {
@@ -66,13 +82,13 @@ export default function Invoices() {
 
       <InvoiceGroup
         prefix={prefix}
-        invoices={invoices?.filter((invoice) => !invoice?.datePaid)}
+        invoices={getUnpaidInvoices(invoices)}
         label="Unpaid Invoices:"
       />
 
       <InvoiceGroup
         prefix={prefix}
-        invoices={invoices?.filter((invoice) => !!invoice?.datePaid)}
+        invoices={getMostRecentlyPaidInvoices(invoices, 10)}
         label="Recent paid Invoices:"
       />
 
