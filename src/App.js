@@ -1,6 +1,5 @@
-import React, { lazy, Suspense } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import Loader from './components/fragments/Loader'
 import ProtectedRoutes from './routes/ProtectedRoutes' //Authenticated routes
 import PublicRoute from './routes/PublicRoute'
 import PrivateRoute from './routes/PrivateRoute'
@@ -10,11 +9,10 @@ import Menu from './components/fragments/Menu'
 import { styled } from '@mui/material/styles'
 import { Container } from '@mui/material'
 
-const Login = lazy(() => import('./components/pages/Login'))
-const ForgotPassword = lazy(() => import('./components/pages/ForgotPassword'))
-const NoFoundComponent = lazy(() =>
-  import('./components/pages/NotFoundComponent')
-)
+import Login from './components/pages/Login'
+import ForgotPassword from './components/pages/ForgotPassword'
+import NoFoundComponent from './components/pages/NotFoundComponent'
+import { AuthenticationProvider } from './components/context/AuthenticationContext'
 
 const PREFIX = 'LdgApp'
 
@@ -38,12 +36,12 @@ const App = () => {
   return (
     <Root>
       <Router>
-        <Header title="Lorna Donald Gardening" />
-        {menuVisible && <Menu />}
-        <Container
-          className={menuVisible ? classes.menuHidden : classes.menuVisible}
-        >
-          <Suspense fallback={<Loader />}>
+        <AuthenticationProvider>
+          <Header title="Lorna Donald Gardening" />
+          {menuVisible && <Menu />}
+          <Container
+            className={menuVisible ? classes.menuHidden : classes.menuVisible}
+          >
             <Switch>
               <PublicRoute path="/login">
                 <Login />
@@ -58,8 +56,8 @@ const App = () => {
                 <NoFoundComponent />
               </Route>
             </Switch>
-          </Suspense>
-        </Container>
+          </Container>
+        </AuthenticationProvider>
       </Router>
     </Root>
   )

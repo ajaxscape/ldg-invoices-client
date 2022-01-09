@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import useFetch from 'react-fetch-hook'
 import { v4 as uuid } from 'uuid'
 import { sort } from '../../utilities/sort'
+import { useAuthentication } from './AuthenticationContext'
 
 export const DataContext = React.createContext(undefined)
 
@@ -11,6 +12,7 @@ const apiUrl = process.env.REACT_APP_API
 
 export const DataProvider = ({ children }) => {
   const updated = useRef([])
+  const { token } = useAuthentication()
 
   const [taskTypes, setTaskTypes] = useState([])
   const [customers, setCustomers] = useState([])
@@ -20,13 +22,25 @@ export const DataProvider = ({ children }) => {
   const getRequestOptions = ({ body }) => {
     return {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(body),
     }
   }
 
-  const { data } = useFetch(`${apiUrl}/customers`)
-  const { data: taskTypeData } = useFetch(`${apiUrl}/task-types`)
+  const { data } = useFetch(`${apiUrl}/customers`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  const { data: taskTypeData } = useFetch(`${apiUrl}/task-types`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
 
   useEffect(() => {
     if (Array.isArray(data)) {

@@ -3,15 +3,12 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { AuthenticationProvider } from './components/context/AuthenticationContext'
 import { GlobalProvider } from './components/context/GlobalContext'
 
 ReactDOM.render(
   <React.StrictMode>
     <GlobalProvider>
-      <AuthenticationProvider>
-        <App />
-      </AuthenticationProvider>
+      <App />
     </GlobalProvider>
   </React.StrictMode>,
   document.getElementById('root')

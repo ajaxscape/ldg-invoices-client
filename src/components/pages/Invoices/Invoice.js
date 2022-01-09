@@ -12,11 +12,13 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { StyledModal } from '../../fragments/StyledModal'
 import PrintedInvoice from '../../fragments/PrintedInvoice'
 import { format } from 'date-fns'
+import { useAuthentication } from '../../context/AuthenticationContext'
 
 const formatDate = (date) => format(new Date(date), 'dd MMMM yyyy')
 
 export default function Invoice() {
   const { getInvoiceById, saveInvoice, getCustomerByInvoiceId } = useData()
+  const { token } = useAuthentication()
   const { customerId, invoiceId } = useParams()
   const [billPayer, setBillPayer] = useState()
   const [invoice, setInvoice] = useState()
@@ -49,7 +51,11 @@ export default function Invoice() {
         setBillPayer(billPayer)
       }
       if (invoice?.invoiceNumber) {
-        fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`).then(() => {
+        fetch(`${sendUrl}/pdf/${invoice?.invoiceNumber}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then(() => {
           setFilename(`${invoice.invoiceNumber}.pdf`)
         })
       }
@@ -86,7 +92,11 @@ export default function Invoice() {
 
   const handleSend = () => {
     setSending(true)
-    fetch(`${sendUrl}/${invoiceId}`)
+    fetch(`${sendUrl}/${invoiceId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (response.status !== 200) {
           console.warn(
@@ -147,7 +157,7 @@ export default function Invoice() {
                           <Grid item xs={12}>
                             Download:{' '}
                             <a
-                              href={`${pdfUrl}/${filename}`}
+                              href={`${pdfUrl}/${filename}?access_token=${token}`}
                               download={filename}
                               target="_blank"
                             >
