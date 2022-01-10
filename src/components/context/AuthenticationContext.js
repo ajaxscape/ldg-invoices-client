@@ -16,12 +16,17 @@ const getRefreshTiming = (expiresAt) => {
 export const AuthenticationProvider = ({ children }) => {
   const [user, setUser] = useState({})
   const [token, setToken] = useState(localStorage.getItem('authToken'))
+  const isDevelopment = process.env.REACT_APP_ENVIRONMENT === 'development'
 
   const isAuthenticated = () => {
     return !!user?.id
   }
 
   const refreshTokenSetup = (res) => {
+    if (isDevelopment) {
+      return // skip token refresh
+    }
+
     let refreshTiming = getRefreshTiming(res.tokenObj.expires_at)
 
     const refreshToken = async () => {
@@ -43,14 +48,12 @@ export const AuthenticationProvider = ({ children }) => {
     localStorage.setItem('authToken', token)
   }, [token])
 
-  const onLogoutSuccess = (res) => {
-    console.log({ state: 'Logout Success', res })
+  const onLogoutSuccess = () => {
     setUser({})
     setToken(null)
   }
 
-  const onFailure = (res) => {
-    console.log({ state: 'Failure', res })
+  const onFailure = () => {
     setUser({})
     setToken(null)
   }
@@ -63,11 +66,10 @@ export const AuthenticationProvider = ({ children }) => {
   })
 
   const onSuccess = async (res) => {
-    console.log({ state: 'Login Success', res })
     const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${res.tokenId}`,
+        Authorization: `Bearer ${res?.tokenId}`,
         'Content-Type': 'application/json',
       },
     })
@@ -99,8 +101,10 @@ export const AuthenticationProvider = ({ children }) => {
     <AuthenticationContext.Provider
       value={{
         user,
-        login: signIn,
-        logout: signOut,
+        login: isDevelopment
+          ? () => onSuccess({ tokenId: 'test-token' })
+          : signIn,
+        logout: isDevelopment ? onLogoutSuccess : signOut,
         token,
         isAuthenticated,
       }}
