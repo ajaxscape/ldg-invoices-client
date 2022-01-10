@@ -43,12 +43,14 @@ export const AuthenticationProvider = ({ children }) => {
     localStorage.setItem('authToken', token)
   }, [token])
 
-  const onLogoutSuccess = () => {
+  const onLogoutSuccess = (res) => {
+    console.log({ state: 'Logout Success', res })
     setUser({})
     setToken(null)
   }
 
-  const onFailure = () => {
+  const onFailure = (res) => {
+    console.log({ state: 'Failure', res })
     setUser({})
     setToken(null)
   }
@@ -61,6 +63,7 @@ export const AuthenticationProvider = ({ children }) => {
   })
 
   const onSuccess = async (res) => {
+    console.log({ state: 'Login Success', res })
     const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {
