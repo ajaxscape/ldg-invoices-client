@@ -30,6 +30,10 @@ const Root = styled('div')(({}) => ({
   },
 }))
 
+const title = process.env.REACT_APP_ENVIRONMENT
+  ? '** Development App **'
+  : 'Lorna Donald Gardening'
+
 const App = () => {
   const { menuVisible } = useGlobal()
 
@@ -37,7 +41,7 @@ const App = () => {
     <Root>
       <Router>
         <AuthenticationProvider>
-          <Header title="Lorna Donald Gardening" />
+          <Header title={title} />
           {menuVisible && <Menu />}
           <Container
             className={menuVisible ? classes.menuHidden : classes.menuVisible}
