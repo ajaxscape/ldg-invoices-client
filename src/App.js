@@ -13,6 +13,7 @@ import Login from './components/pages/Login'
 import ForgotPassword from './components/pages/ForgotPassword'
 import NoFoundComponent from './components/pages/NotFoundComponent'
 import { AuthenticationProvider } from './components/context/AuthenticationContext'
+import ScrollToTop from './components/fragments/ScrollToTop'
 
 const PREFIX = 'LdgApp'
 
@@ -40,28 +41,30 @@ const App = () => {
   return (
     <Root>
       <Router>
-        <AuthenticationProvider>
-          <Header title={title} />
-          {menuVisible && <Menu />}
-          <Container
-            className={menuVisible ? classes.menuHidden : classes.menuVisible}
-          >
-            <Switch>
-              <PublicRoute path="/login">
-                <Login />
-              </PublicRoute>
-              <PublicRoute path="/forgot-password">
-                <ForgotPassword />
-              </PublicRoute>
-              <PrivateRoute path="/">
-                <ProtectedRoutes />
-              </PrivateRoute>
-              <Route path="*">
-                <NoFoundComponent />
-              </Route>
-            </Switch>
-          </Container>
-        </AuthenticationProvider>
+        <ScrollToTop>
+          <AuthenticationProvider>
+            <Header title={title} />
+            {menuVisible && <Menu />}
+            <Container
+              className={menuVisible ? classes.menuHidden : classes.menuVisible}
+            >
+              <Switch>
+                <PublicRoute path="/login">
+                  <Login />
+                </PublicRoute>
+                <PublicRoute path="/forgot-password">
+                  <ForgotPassword />
+                </PublicRoute>
+                <PrivateRoute path="/">
+                  <ProtectedRoutes />
+                </PrivateRoute>
+                <Route path="*">
+                  <NoFoundComponent />
+                </Route>
+              </Switch>
+            </Container>
+          </AuthenticationProvider>
+        </ScrollToTop>
       </Router>
     </Root>
   )

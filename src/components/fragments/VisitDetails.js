@@ -17,7 +17,7 @@ const Root = styled('div')(({ theme }) => ({
   },
 }))
 
-export function VisitDetails({ customerId, visitId, edit, displayCustomer }) {
+export function VisitDetails({ customerId, visitId, displayCustomer }) {
   const data = useData()
   const [visit, setVisit] = useState()
 
@@ -32,9 +32,7 @@ export function VisitDetails({ customerId, visitId, edit, displayCustomer }) {
           <VisitCard
             customerId={displayCustomer ? customerId : null}
             visit={visit}
-            editLink={
-              edit ? `/Customers/${customerId}/Visits/${visitId}/Edit` : null
-            }
+            editLink={`/Customers/${customerId}/Visits/${visitId}/Edit`}
           />
         </VisitProvider>
       )}

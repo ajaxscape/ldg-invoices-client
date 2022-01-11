@@ -12,6 +12,16 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
 import ReceiptIcon from '@mui/icons-material/Receipt'
+import { sort } from '../../../utilities/sort'
+
+const visitSort = (
+  { visitDate: dateA, startTime: timeA },
+  { visitDate: dateB, startTime: timeB }
+) =>
+  sort(
+    new Date(`${dateB} ${timeB}`).valueOf(),
+    new Date(`${dateA} ${timeA}`).valueOf()
+  )
 
 function VisitGroup({ visits, label, customerId }) {
   return (
@@ -25,7 +35,6 @@ function VisitGroup({ visits, label, customerId }) {
                 customerId={visit.customerId}
                 visitId={visit.id}
                 displayCustomer={visit.customerId !== customerId}
-                edit={!!customerId}
               />
             ) : null
           )}
@@ -60,7 +69,7 @@ export default function Visits() {
         {!!visits?.length && (
           <VisitGroup
             customerId={customerId}
-            visits={visits?.filter((visit) => !visit?.datePaid)}
+            visits={visits.filter((visit) => !visit?.datePaid).sort(visitSort)}
             label="Visits not yet invoiced:"
           />
         )}

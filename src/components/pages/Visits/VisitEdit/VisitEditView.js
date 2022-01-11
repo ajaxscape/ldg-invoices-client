@@ -8,6 +8,7 @@ import { Redirect, useRouteMatch } from 'react-router-dom'
 import MenuGroup from '../../../fragments/MenuGroup'
 import nearestDateTime from '../../../../utilities/nearestDateTime'
 import { StyledModal } from '../../../fragments/StyledModal'
+import { CustomerDetails } from '../../../fragments/CustomerDetails'
 
 export default function VisitEditView({
   children,
@@ -56,6 +57,7 @@ export default function VisitEditView({
       {!!warningIgnored && <Redirect to={continueTo} />}
       <Grid container direction="column" spacing={2} alignContent="stretch">
         <PageTitle icon={NaturePeopleIcon} title="Visit" />
+        <CustomerDetails />
 
         {!!data && (
           <MenuGroup
