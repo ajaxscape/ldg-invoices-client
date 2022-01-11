@@ -16,6 +16,7 @@ const getRefreshTiming = (expiresAt) => {
 export const AuthenticationProvider = ({ children }) => {
   const [user, setUser] = useState({})
   const [token, setToken] = useState(localStorage.getItem('authToken'))
+  const [authenticating, setAuthenticating] = useState(false)
   const isDevelopment = process.env.REACT_APP_ENVIRONMENT === 'development'
 
   const isAuthenticated = () => {
@@ -54,6 +55,7 @@ export const AuthenticationProvider = ({ children }) => {
   }
 
   const onFailure = () => {
+    setAuthenticating(false)
     setUser({})
     setToken(null)
   }
@@ -73,6 +75,8 @@ export const AuthenticationProvider = ({ children }) => {
         'Content-Type': 'application/json',
       },
     })
+
+    setAuthenticating(false)
 
     if (response.ok) {
       const user = await response.json()
@@ -97,15 +101,31 @@ export const AuthenticationProvider = ({ children }) => {
     accessType: 'offline',
   })
 
+  const login = () => {
+    setAuthenticating(true)
+    if (isDevelopment) {
+      return onSuccess({ tokenId: 'test-token' })
+    } else {
+      return signIn()
+    }
+  }
+
+  const logout = () => {
+    if (isDevelopment) {
+      return onLogoutSuccess()
+    } else {
+      return signOut()
+    }
+  }
+
   return (
     <AuthenticationContext.Provider
       value={{
         user,
-        login: isDevelopment
-          ? () => onSuccess({ tokenId: 'test-token' })
-          : signIn,
-        logout: isDevelopment ? onLogoutSuccess : signOut,
+        login,
+        logout,
         token,
+        authenticating,
         isAuthenticated,
       }}
     >
