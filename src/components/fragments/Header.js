@@ -40,6 +40,12 @@ export default function Header({ title }) {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {title}
+            {!!process.env.REACT_APP_ENVIRONMENT && (
+              <>
+                <br />
+                <>* TEST ENVIRONMENT *</>
+              </>
+            )}
           </Typography>
           {isAuthenticated() && (
             <IconButton

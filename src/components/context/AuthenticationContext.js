@@ -68,6 +68,7 @@ export const AuthenticationProvider = ({ children }) => {
   })
 
   const onSuccess = async (res) => {
+    setAuthenticating(true)
     const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {
