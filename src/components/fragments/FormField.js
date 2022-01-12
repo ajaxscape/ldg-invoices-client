@@ -73,7 +73,13 @@ export default function FormField({
       {type === 'select' && (
         <>
           <InputLabel>{label}</InputLabel>
-          <Select id={name} name={name} onChange={onChange} value={value}>
+          <Select
+            sx={{ minWidth: 100, marginRight: 2 }}
+            id={name}
+            name={name}
+            onChange={onChange}
+            value={value}
+          >
             {options.map(({ value, label }) => (
               <MenuItem key={value} value={value}>
                 {label}

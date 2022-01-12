@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, IconButton } from '@mui/material'
+import { Button, Card, CardContent, Grid, IconButton } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useEffect, useState } from 'react'
@@ -34,7 +34,10 @@ const Root = styled('div')(({ theme }) => ({
   },
 }))
 
-export function VisitCard({ editLink, customerId }) {
+const formatDate = (date) => format(date, 'dd MMMM yyyy')
+const formatTime = (time) => format(time, 'h:mm a')
+
+export function VisitCard({ editLink, editText, customerId }) {
   const { customerId: visitCustomerId } = useParams()
   const { getCustomerById } = useData()
   const { property, tasks, visitDateTime } = useVisit()
@@ -76,10 +79,12 @@ export function VisitCard({ editLink, customerId }) {
               <strong>
                 {!!visitDate && (
                   <>
-                    {format(visitDate, 'dd MMMM yyyy')}
+                    {formatDate(visitDate)}
                     <br />
-                    {format(startTime, 'h:mm a')} to{' '}
-                    {format(finishTime, 'h:mm a')}
+                    {formatTime(startTime)}
+                    {formatTime(startTime) !== formatTime(finishTime) && (
+                      <> to {formatTime(finishTime)}</>
+                    )}
                   </>
                 )}
               </strong>
@@ -118,16 +123,31 @@ export function VisitCard({ editLink, customerId }) {
             <div className={classes.buttons}>
               {!!editLink && (
                 <>
-                  <IconButton
-                    edge="end"
-                    variant="contained"
-                    color={'primary'}
-                    to={editLink}
-                    component={Link}
-                    tabIndex={0}
-                  >
-                    <EditIcon />
-                  </IconButton>
+                  {!!editText ? (
+                    <Button
+                      startIcon={<EditIcon />}
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      tabIndex={0}
+                      to={editLink}
+                      fullWidth={true}
+                      size="large"
+                    >
+                      {editText}
+                    </Button>
+                  ) : (
+                    <IconButton
+                      edge="end"
+                      variant="contained"
+                      color={'primary'}
+                      to={editLink}
+                      component={Link}
+                      tabIndex={0}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  )}
                 </>
               )}
             </div>

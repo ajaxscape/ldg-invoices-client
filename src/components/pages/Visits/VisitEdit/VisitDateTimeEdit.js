@@ -43,7 +43,7 @@ export default function VisitDateTimeEdit(params) {
   return (
     <VisitEditView
       {...params}
-      next="Confirmation"
+      done="Finish"
       subHeading="Visit date and time"
       fields={dateTimeFields}
       data={visitDateTime}

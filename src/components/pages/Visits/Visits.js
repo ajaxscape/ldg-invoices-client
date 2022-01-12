@@ -4,15 +4,13 @@ import NaturePeopleIcon from '@mui/icons-material/NaturePeople'
 import { PageTitle } from '../../fragments/PageTitle'
 import { useParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
-import MenuGroup from '../../fragments/MenuGroup'
 import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
-import { VisitDetails } from '../../fragments/VisitDetails'
 import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { v4 as uuid } from 'uuid'
-import AddIcon from '@mui/icons-material/Add'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import { sort } from '../../../utilities/sort'
+import VisitGroup from '../../fragments/VisitGroup'
 
 const visitSort = (
   { visitDate: dateA, startTime: timeA },
@@ -23,31 +21,11 @@ const visitSort = (
     new Date(`${dateA} ${timeA}`).valueOf()
   )
 
-function VisitGroup({ visits, label, customerId }) {
-  return (
-    <>
-      {!!visits?.length && (
-        <MenuGroup label={label}>
-          {visits.map((visit) =>
-            visit ? (
-              <VisitDetails
-                key={`visit-${visit.id}`}
-                customerId={visit.customerId}
-                visitId={visit.id}
-                displayCustomer={visit.customerId !== customerId}
-              />
-            ) : null
-          )}
-        </MenuGroup>
-      )}
-    </>
-  )
-}
-
 export default function Visits() {
   const { getVisits } = useData()
   const { customerId } = useParams()
   const [visits, setVisits] = useState()
+  const [currentVisit, setCurrentVisit] = useState()
   const [prefix, setPrefix] = useState()
 
   useEffect(() => {
@@ -58,6 +36,14 @@ export default function Visits() {
 
   useEffect(() => {
     setVisits(getVisits({ customerId }))
+    const visits = getVisits({ customerId })
+    const currentVisit = visits.find((visit) => visit?.tasks?.length === 0)
+    if (currentVisit) {
+      setCurrentVisit(currentVisit)
+      setVisits(visits.filter(({ id }) => id !== currentVisit.id))
+    } else {
+      setVisits(visits)
+    }
   }, [getVisits, customerId])
 
   return (
@@ -65,6 +51,14 @@ export default function Visits() {
       <Grid container direction="column" spacing={2} alignContent="stretch">
         <PageTitle icon={NaturePeopleIcon} title="Visits" />
         <CustomerDetails />
+
+        {!!currentVisit && (
+          <VisitGroup
+            customerId={customerId}
+            visits={[currentVisit]}
+            label="Current visit:"
+          />
+        )}
 
         {!!visits?.length && (
           <VisitGroup
@@ -76,11 +70,6 @@ export default function Visits() {
 
         {!!customerId && (
           <>
-            <MenuButton
-              to={`/Customers/${customerId}/Visits/${uuid()}/Edit`}
-              icon={AddIcon}
-              label="New Visit"
-            />
             {!!visits?.some(({ tasks = [] }) => tasks.length) && (
               <MenuButton
                 to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`}

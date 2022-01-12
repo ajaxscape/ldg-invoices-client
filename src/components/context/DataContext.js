@@ -16,6 +16,7 @@ export const DataProvider = ({ children }) => {
 
   const [taskTypes, setTaskTypes] = useState([])
   const [customers, setCustomers] = useState([])
+  const [loading, setLoading] = useState(true)
   const [customerToSave, setCustomerToSave] = useState()
   const [syncTick, setSyncTick] = useState(0)
 
@@ -66,6 +67,7 @@ export const DataProvider = ({ children }) => {
           }),
         ]
       })
+      setLoading(false)
     }
   }, [data])
 
@@ -256,6 +258,7 @@ export const DataProvider = ({ children }) => {
         getVisits,
         getVisitById,
         saveVisit,
+        loading,
       }}
     >
       {children}

@@ -1,10 +1,10 @@
 import { PageTitle } from '../../../fragments/PageTitle'
 import NaturePeopleIcon from '@mui/icons-material/NaturePeople'
 import React, { useState } from 'react'
-import { Alert, Grid } from '@mui/material'
+import { Alert, Button, Grid } from '@mui/material'
 import FormField from '../../../fragments/FormField'
 import { NavButtons } from '../../../fragments/Buttons/NavButtons'
-import { Redirect, useRouteMatch } from 'react-router-dom'
+import { Link, Redirect, useRouteMatch } from 'react-router-dom'
 import MenuGroup from '../../../fragments/MenuGroup'
 import nearestDateTime from '../../../../utilities/nearestDateTime'
 import { StyledModal } from '../../../fragments/StyledModal'
@@ -20,6 +20,7 @@ export default function VisitEditView({
   setData,
   next,
   prev,
+  done,
   error,
   warning,
 }) {
@@ -38,6 +39,8 @@ export default function VisitEditView({
 
   const continueTo = next
     ? path.substring(0, path.lastIndexOf('/Edit/') + 6) + next
+    : done
+    ? path.substring(0, path.lastIndexOf('/Edit/') + 6) + done
     : 'Save'
 
   const handleChange = ({ target }) => {
@@ -93,14 +96,30 @@ export default function VisitEditView({
             <Alert severity="error">{error}</Alert>
           </Grid>
         )}
-        <NavButtons
-          backTo={backTo}
-          backLabel={prev ? 'Back' : 'Cancel'}
-          continueToDisabled={!!error}
-          continueTo={!!warning ? null : continueTo}
-          continueClick={!warning ? null : handleWarning}
-          continueLabel={next ? 'Continue' : 'Save'}
-        />
+        {!!done ? (
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              tabIndex={0}
+              to={continueTo}
+              fullWidth={true}
+              size="large"
+            >
+              Done
+            </Button>
+          </Grid>
+        ) : (
+          <NavButtons
+            backTo={backTo}
+            backLabel={prev ? 'Back' : 'Cancel'}
+            continueToDisabled={!!error}
+            continueTo={!!warning ? null : continueTo}
+            continueClick={!warning ? null : handleWarning}
+            continueLabel={next ? 'Continue' : 'Save'}
+          />
+        )}
       </Grid>
       <StyledModal
         open={warningModalOpen}

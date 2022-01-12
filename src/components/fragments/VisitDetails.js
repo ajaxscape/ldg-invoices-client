@@ -32,7 +32,7 @@ export function VisitDetails({ customerId, visitId, displayCustomer }) {
           <VisitCard
             customerId={displayCustomer ? customerId : null}
             visit={visit}
-            editLink={`/Customers/${customerId}/Visits/${visitId}/Edit`}
+            editLink={`/Customers/${customerId}/Visits/${visitId}/Edit/Finish`}
           />
         </VisitProvider>
       )}
