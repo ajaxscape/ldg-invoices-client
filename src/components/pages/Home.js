@@ -16,6 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     const visits = getVisits()
+    // The first open visit
     const currentVisit = visits.find((visit) => visit?.tasks?.length === 0)
     if (currentVisit) {
       setCurrentVisit(currentVisit)
