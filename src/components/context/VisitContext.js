@@ -30,7 +30,9 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
       setVisitDateTime({
         visitDate: new Date(visitDate),
         startTime: new Date(`${visitDate} ${startTime}`),
-        finishTime: new Date(`${visitDate} ${finishTime}`),
+        finishTime: tasks?.length
+          ? new Date(`${visitDate} ${finishTime}`)
+          : nearestDateTime(15),
       })
       setProperty({ ...property })
       setTasks([...tasks])

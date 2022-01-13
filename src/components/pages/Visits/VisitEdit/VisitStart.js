@@ -7,7 +7,7 @@ import { NavButtons } from '../../../fragments/Buttons/NavButtons'
 import { useRouteMatch } from 'react-router-dom'
 import { VisitCard } from '../../../fragments/VisitCard'
 
-export default function VisitConfirmation({ customerId, visitId }) {
+export default function VisitStart({ customerId, visitId }) {
   const { visitDateTime } = useVisit()
   const { visitDate } = visitDateTime || {}
 
@@ -17,8 +17,7 @@ export default function VisitConfirmation({ customerId, visitId }) {
     .replace(':customerId', customerId)
     .replace(':visitId', visitId)
 
-  const backTo =
-    path.substring(0, path.lastIndexOf('/Edit/') + 6) + 'VisitDateTime'
+  const backTo = path.substring(0, path.lastIndexOf('/Visits/'))
 
   const continueTo = path.substring(0, path.lastIndexOf('/Edit/') + 6) + 'Save'
 
@@ -26,17 +25,17 @@ export default function VisitConfirmation({ customerId, visitId }) {
     <>
       {visitDate && (
         <Grid container direction="column" spacing={2} alignContent="stretch">
-          <PageTitle icon={NaturePeopleIcon} title="Visit" />
+          <PageTitle icon={NaturePeopleIcon} title="Visit Start" />
 
           <Grid item xs={12}>
-            <p>You are about to save the following details:</p>
+            <p>Please check this is correct before you press start:</p>
           </Grid>
           <VisitCard customerId={customerId} />
           <NavButtons
             backTo={backTo}
-            backLabel="Back"
+            backLabel="Cancel"
             continueTo={continueTo}
-            continueLabel="Save"
+            continueLabel="Start"
           />
         </Grid>
       )}

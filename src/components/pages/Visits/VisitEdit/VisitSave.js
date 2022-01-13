@@ -25,7 +25,7 @@ export default function VisitSave({ customerId, visitId }) {
       {saved ? (
         <Redirect
           from={path}
-          to={path.substring(0, path.indexOf('/Visits/') + 8)}
+          to={path.substring(0, path.indexOf('/Visits/'))}
           exact
         />
       ) : (

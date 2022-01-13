@@ -31,7 +31,7 @@ export default function VisitTasks() {
         const { quantity, taskType, isMarkedForDeletion } = task
         if (taskType && !isMarkedForDeletion) {
           const hours = Math.floor(quantity)
-          const minutes = quantity - hours
+          const minutes = (quantity - hours) * 60
           return {
             ...task,
             hours,

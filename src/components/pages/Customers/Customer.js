@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
 import NaturePeopleIcon from '@mui/icons-material/NaturePeople'
 import ReceiptIcon from '@mui/icons-material/Receipt'
@@ -12,12 +12,22 @@ import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
 import { useData } from '../../context/DataContext'
+import VisitGroup from '../../fragments/VisitGroup'
 
 export default function Customer() {
-  const { getCustomerById } = useData()
+  const { getCustomerById, getVisits } = useData()
   const { customerId } = useParams()
+  const [currentVisit, setCurrentVisit] = useState()
 
   const customer = getCustomerById && getCustomerById(customerId)
+
+  useEffect(() => {
+    const visits = getVisits({ customerId })
+    const visit = visits.find((visit) => visit?.tasks?.length === 0)
+    if (visit) {
+      setCurrentVisit(visit)
+    }
+  }, [getVisits, customerId])
 
   return (
     <Grid container direction="column" spacing={2} alignContent="stretch">
@@ -26,6 +36,20 @@ export default function Customer() {
 
       {customerId ? (
         <>
+          {!!currentVisit ? (
+            <VisitGroup
+              customerId={customerId}
+              visits={[currentVisit]}
+              label="Current visit:"
+            />
+          ) : (
+            <MenuButton
+              to={`/Customers/${customerId}/Visits/${uuid()}/Edit/Start`}
+              icon={AddIcon}
+              label="New Visit"
+            />
+          )}
+
           <MenuButton
             to={`/Customers/${customerId}/Visits`}
             icon={NaturePeopleIcon}
