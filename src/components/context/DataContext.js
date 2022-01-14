@@ -137,10 +137,23 @@ export const DataProvider = ({ children }) => {
     setCustomers((customers) => {
       let newCustomers
       if (customers.find(({ id }) => id === customerToSave.id)) {
-        newCustomers = customers.map((customer) =>
-          customer.id === customerToSave.id ? customerToSave : customer
-        )
+        newCustomers = customers.map((customer) => {
+          if (customer.id === customerToSave.id) {
+            customerToSave.properties = customerToSave?.properties?.map(
+              ({ address, ...property }) =>
+                address.id === customerToSave.address.id
+                  ? { ...property, address: { ...customerToSave.address } }
+                  : { ...property, address }
+            )
+            return customerToSave
+          } else {
+            return customer
+          }
+        })
       } else {
+        if (!customerToSave.address.id) {
+          customerToSave.address.id = uuid()
+        }
         newCustomers = [
           ...customers,
           {
