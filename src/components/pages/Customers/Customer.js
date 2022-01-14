@@ -17,15 +17,21 @@ import VisitGroup from '../../fragments/VisitGroup'
 export default function Customer() {
   const { getCustomerById, getVisits } = useData()
   const { customerId } = useParams()
+  const [visitsForInvoice, setVisitsForInvoice] = useState([])
   const [currentVisit, setCurrentVisit] = useState()
 
   const customer = getCustomerById && getCustomerById(customerId)
 
   useEffect(() => {
+    setVisitsForInvoice([])
     const visits = getVisits({ customerId })
     const visit = visits.find((visit) => visit?.tasks?.length === 0)
     if (visit) {
       setCurrentVisit(visit)
+    } else {
+      if (visits) {
+        setVisitsForInvoice(visits)
+      }
     }
   }, [getVisits, customerId])
 
@@ -48,6 +54,18 @@ export default function Customer() {
               icon={AddIcon}
               label="New Visit"
             />
+          )}
+
+          {!!customerId && (
+            <>
+              {!!visitsForInvoice?.some(({ tasks = [] }) => tasks.length) && (
+                <MenuButton
+                  to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`}
+                  icon={ReceiptIcon}
+                  label="Generate Invoice"
+                />
+              )}
+            </>
           )}
 
           <MenuButton

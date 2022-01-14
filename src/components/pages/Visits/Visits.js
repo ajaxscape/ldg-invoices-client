@@ -6,9 +6,6 @@ import { useParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
 import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
-import { MenuButton } from '../../fragments/Buttons/MenuButton'
-import { v4 as uuid } from 'uuid'
-import ReceiptIcon from '@mui/icons-material/Receipt'
 import { sort } from '../../../utilities/sort'
 import VisitGroup from '../../fragments/VisitGroup'
 
@@ -66,18 +63,6 @@ export default function Visits() {
             visits={visits.filter((visit) => !visit?.datePaid).sort(visitSort)}
             label="Visits not yet invoiced:"
           />
-        )}
-
-        {!!customerId && (
-          <>
-            {!!visits?.some(({ tasks = [] }) => tasks.length) && (
-              <MenuButton
-                to={`/Customers/${customerId}/Invoices/${uuid()}/Edit`}
-                icon={ReceiptIcon}
-                label="Generate Invoice"
-              />
-            )}
-          </>
         )}
 
         <NavButtons backTo={prefix ?? '/Home'} />

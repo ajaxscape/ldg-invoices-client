@@ -24,7 +24,7 @@ export default function InvoiceDetailsEdit({ customerId, invoiceId }) {
     .replace(':customerId', customerId)
     .replace(':invoiceId', invoiceId)
 
-  const backTo = path.substring(0, path.lastIndexOf('/Invoices/')) + '/Visits'
+  const backTo = path.substring(0, path.lastIndexOf('/Invoices/'))
 
   const continueTo = path.substring(0, path.lastIndexOf('/Edit/') + 6) + 'Save'
 
