@@ -64,8 +64,6 @@ export default function Header({ title }) {
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
-          {syncing && <SyncIcon />}
-          {!health && <CloudOffIcon />}
           {isAuthenticated() && (
             <IconButton
               className={classes.menuButton}
@@ -74,7 +72,13 @@ export default function Header({ title }) {
               onClick={onMenuClick}
               style={{ float: 'right' }}
             >
-              <MenuIcon />
+              {syncing ? (
+                <SyncIcon />
+              ) : health ? (
+                <MenuIcon />
+              ) : (
+                <CloudOffIcon />
+              )}
             </IconButton>
           )}
         </Toolbar>
