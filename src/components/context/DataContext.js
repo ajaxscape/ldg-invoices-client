@@ -3,6 +3,8 @@ import useFetch from 'react-fetch-hook'
 import { v4 as uuid } from 'uuid'
 import { sort } from '../../utilities/sort'
 import { useAuthentication } from './AuthenticationContext'
+import useLocalStorageState from 'use-local-storage-state'
+import { useGlobal } from './GlobalContext'
 
 export const DataContext = React.createContext(undefined)
 
@@ -15,10 +17,11 @@ export const DataProvider = ({ children }) => {
   const { token } = useAuthentication()
 
   const [taskTypes, setTaskTypes] = useState([])
-  const [customers, setCustomers] = useState([])
+  const [customers, setCustomers] = useLocalStorageState('customers', [])
   const [loading, setLoading] = useState(true)
   const [customerToSave, setCustomerToSave] = useState()
   const [syncTick, setSyncTick] = useState(0)
+  const { setSyncing } = useGlobal()
 
   const getRequestOptions = ({ body }) => {
     return {
@@ -77,6 +80,13 @@ export const DataProvider = ({ children }) => {
     }
   }, [taskTypeData])
 
+  const syncCustomer = (customerId) => {
+    if (!updated.current.includes(customerId)) {
+      updated.current.push(customerId)
+      setSyncing(true)
+    }
+  }
+
   const saveCustomerById = async (customerId) => {
     try {
       const customerToSave = getCustomerById(customerId)
@@ -95,15 +105,12 @@ export const DataProvider = ({ children }) => {
             customer.id === savedCustomer.id ? savedCustomer : customer
           )
         )
+        setSyncing(false)
       } else {
-        if (!updated.current.includes(customerId)) {
-          updated.current.push(customerId)
-        }
+        syncCustomer(customerId)
       }
     } catch {
-      if (!updated.current.includes(customerId)) {
-        updated.current.push(customerId)
-      }
+      syncCustomer(customerId)
     }
   }
 
@@ -168,9 +175,7 @@ export const DataProvider = ({ children }) => {
       return newCustomers
     })
     // Initiate save as soon as possible
-    if (!updated.current.includes(customerToSave.id)) {
-      updated.current.push(customerToSave.id)
-    }
+    syncCustomer(customerToSave.id)
     setSyncTick((tick) => tick + 1)
   }
 

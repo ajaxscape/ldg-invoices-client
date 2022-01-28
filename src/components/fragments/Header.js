@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import CloudOffIcon from '@mui/icons-material/CloudOff'
+import SyncIcon from '@mui/icons-material/Sync'
 import { useAuthentication } from '../context/AuthenticationContext'
 import { useGlobal } from '../context/GlobalContext'
 import { styled } from '@mui/material/styles'
@@ -27,8 +29,29 @@ const Root = styled('div')(({ theme }) => ({
 }))
 
 export default function Header({ title }) {
-  const { menuVisible, setMenuVisible } = useGlobal()
+  const { menuVisible, setMenuVisible, syncing } = useGlobal()
+  const [health, setHealth] = useState(true)
   const { isAuthenticated } = useAuthentication()
+  const apiUrl = process.env.REACT_APP_API
+
+  useEffect(() => {
+    let timeout
+
+    const checkHealth = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/health`)
+        console.log(response)
+        const result = await response.json()
+        setHealth(result.ok ?? false)
+      } catch {
+        setHealth(false)
+      } finally {
+        timeout = setTimeout(checkHealth, 10000)
+      }
+    }
+    checkHealth()
+    return () => clearTimeout(timeout)
+  }, [])
 
   const onMenuClick = () => {
     setMenuVisible(!menuVisible)
@@ -41,6 +64,8 @@ export default function Header({ title }) {
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
+          {syncing && <SyncIcon />}
+          {!health && <CloudOffIcon />}
           {isAuthenticated() && (
             <IconButton
               className={classes.menuButton}
