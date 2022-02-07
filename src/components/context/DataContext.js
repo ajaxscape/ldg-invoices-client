@@ -283,7 +283,6 @@ export const DataProvider = ({ children }) => {
         getVisitById,
         saveVisit,
         loading,
-        error,
       }}
     >
       {children}
