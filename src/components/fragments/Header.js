@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
+import ErrorIcon from '@mui/icons-material/Error'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloudOffIcon from '@mui/icons-material/CloudOff'
 import SyncIcon from '@mui/icons-material/Sync'
@@ -72,7 +73,9 @@ export default function Header({ title }) {
               onClick={onMenuClick}
               style={{ float: 'right' }}
             >
-              {syncing ? (
+              {error ? (
+                <ErrorIcon />
+              ) : syncing ? (
                 <SyncIcon />
               ) : health ? (
                 <MenuIcon />

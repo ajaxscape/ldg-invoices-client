@@ -21,7 +21,7 @@ export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [customerToSave, setCustomerToSave] = useState()
   const [syncTick, setSyncTick] = useState(0)
-  const { setSyncing } = useGlobal()
+  const { setSyncing, setError } = useGlobal()
 
   const getRequestOptions = ({ body }) => {
     return {
@@ -98,16 +98,22 @@ export const DataProvider = ({ children }) => {
         `${apiUrl}/customers`,
         getRequestOptions({ body: customerToSave })
       )
-      const savedCustomer = await response.json()
-      if (savedCustomer?.id) {
-        setCustomers((customers) =>
-          customers.map((customer) =>
-            customer.id === savedCustomer.id ? savedCustomer : customer
-          )
-        )
-        setSyncing(false)
-      } else {
+
+      if (response.status !== 200) {
+        setError(true)
         syncCustomer(customerId)
+      } else {
+        const savedCustomer = await response.json()
+        if (savedCustomer?.id) {
+          setCustomers((customers) =>
+            customers.map((customer) =>
+              customer.id === savedCustomer.id ? savedCustomer : customer
+            )
+          )
+          setSyncing(false)
+        } else {
+          syncCustomer(customerId)
+        }
       }
     } catch {
       syncCustomer(customerId)
@@ -277,6 +283,7 @@ export const DataProvider = ({ children }) => {
         getVisitById,
         saveVisit,
         loading,
+        error,
       }}
     >
       {children}
