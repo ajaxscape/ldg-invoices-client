@@ -30,7 +30,7 @@ const Root = styled('div')(({ theme }) => ({
 }))
 
 export default function Header({ title }) {
-  const { menuVisible, setMenuVisible, syncing } = useGlobal()
+  const { menuVisible, setMenuVisible, syncing, error } = useGlobal()
   const [health, setHealth] = useState(true)
   const { isAuthenticated } = useAuthentication()
   const apiUrl = process.env.REACT_APP_API
