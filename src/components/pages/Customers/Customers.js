@@ -37,27 +37,23 @@ export default function Customers() {
         customers
           .map(
             ({
-              id,
-              title,
-              firstName,
-              lastName,
               address,
               updatedAt,
               invoices,
+              visitsYetToBeInvoiced,
+              ...customer
             }) => {
               const dates = [
                 updatedAt,
                 address.updatedAt,
                 ...invoices.map(({ updatedAt }) => updatedAt),
+                ...visitsYetToBeInvoiced.map(({ updatedAt }) => updatedAt),
               ].map((date) => new Date(date))
               const updated = dates.sort((dateB, dateA) =>
                 sort(dateA, dateB)
               )[0]
               return {
-                id,
-                title,
-                firstName,
-                lastName,
+                ...customer,
                 updated,
               }
             }
