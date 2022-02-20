@@ -28,8 +28,8 @@ export default function Customers() {
   const { customers } = useData()
   const [sortedCustomers, setSortedCustomers] = useState([])
   const [allCustomers, setAllCustomers] = useState(false)
-  const dateLess40 = new Date()
-  dateLess40.setDate(dateLess40.getDate() - 30)
+  const dateLess15 = new Date()
+  dateLess15.setDate(dateLess15.getDate() - 15)
 
   useEffect(() => {
     if (customers?.length) {
@@ -83,7 +83,7 @@ export default function Customers() {
       {!!sortedCustomers?.length && (
         <MenuGroup label="Active customers:">
           {sortedCustomers
-            .filter(({ updated }) => allCustomers || updated > dateLess40)
+            .filter(({ updated }) => allCustomers || updated > dateLess15)
             .map((customer) => (
               <ViewCustomerRow
                 key={`customer-${customer.id}`}
