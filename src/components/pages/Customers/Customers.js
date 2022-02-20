@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import PeopleIcon from '@mui/icons-material/People'
 import PersonIcon from '@mui/icons-material/Person'
@@ -26,19 +26,64 @@ function ViewCustomerRow({ customer }) {
 
 export default function Customers() {
   const { customers } = useData()
+  const [sortedCustomers, setSortedCustomers] = useState([])
+  const [allCustomers, setAllCustomers] = useState(false)
+  const dateLess40 = new Date()
+  dateLess40.setDate(dateLess40.getDate() - 30)
+
+  useEffect(() => {
+    if (customers?.length) {
+      setSortedCustomers(
+        customers
+          .map(
+            ({
+              id,
+              title,
+              firstName,
+              lastName,
+              address,
+              updatedAt,
+              invoices,
+            }) => {
+              const dates = [
+                updatedAt,
+                address.updatedAt,
+                ...invoices.map(({ updatedAt }) => updatedAt),
+              ].map((date) => new Date(date))
+              const updated = dates.sort((dateB, dateA) =>
+                sort(dateA, dateB)
+              )[0]
+              return {
+                id,
+                title,
+                firstName,
+                lastName,
+                updated,
+              }
+            }
+          )
+          .sort(
+            (
+              { firstName: fa, lastName: la },
+              { firstName: fb, lastName: lb }
+            ) => sort(`${fa}--${la}`, `${fb}--${lb}`)
+          )
+      )
+    }
+  }, [customers])
+
+  const handleAllCustomers = () => {
+    setAllCustomers(true)
+  }
+
   return (
     <Grid container direction="column" spacing={2} alignContent="stretch">
       <PageTitle icon={PeopleIcon} title="Customers" />
 
-      {!!customers?.length && (
+      {!!sortedCustomers?.length && (
         <MenuGroup label="Active customers:">
-          {customers
-            .sort(
-              (
-                { firstName: fa, lastName: la },
-                { firstName: fb, lastName: lb }
-              ) => sort(`${fa}--${la}`, `${fb}--${lb}`)
-            )
+          {sortedCustomers
+            .filter(({ updated }) => allCustomers || updated > dateLess40)
             .map((customer) => (
               <ViewCustomerRow
                 key={`customer-${customer.id}`}
@@ -46,6 +91,10 @@ export default function Customers() {
               />
             ))}{' '}
         </MenuGroup>
+      )}
+
+      {!allCustomers && (
+        <MenuButton label="All Customers" onClick={handleAllCustomers} />
       )}
 
       <MenuButton
