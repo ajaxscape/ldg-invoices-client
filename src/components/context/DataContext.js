@@ -3,7 +3,6 @@ import useFetch from 'react-fetch-hook'
 import { v4 as uuid } from 'uuid'
 import { sort } from '../../utilities/sort'
 import { useAuthentication } from './AuthenticationContext'
-import useLocalStorageState from 'use-local-storage-state'
 import { useGlobal } from './GlobalContext'
 
 export const DataContext = React.createContext(undefined)
@@ -17,7 +16,7 @@ export const DataProvider = ({ children }) => {
   const { token } = useAuthentication()
 
   const [taskTypes, setTaskTypes] = useState([])
-  const [customers, setCustomers] = useLocalStorageState('customers', [])
+  const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
   const [customerToSave, setCustomerToSave] = useState()
   const [syncTick, setSyncTick] = useState(0)
@@ -174,6 +173,7 @@ export const DataProvider = ({ children }) => {
             properties: [{ id: uuid(), address: customerToSave.address }],
             visitsYetToBeInvoiced: [],
             invoices: [],
+            customerTaskTypes: taskTypes.map(({ id, ...taskType }) => taskType),
             ...customerToSave,
           },
         ]

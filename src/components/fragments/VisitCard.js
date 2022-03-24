@@ -58,7 +58,7 @@ export function VisitCard({ editLink, editText, customerId }) {
       setFullName(formatName(customer))
       if (visitCustomerId) {
         if (
-          formatAddress(customer.address) === formatAddress(property.address)
+          formatAddress(customer?.address) === formatAddress(property?.address)
         ) {
           setShowAddress(false)
         } else {

@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import MenuGroup from './MenuGroup'
 import { useVisit } from '../context/VisitContext'
-import { useData } from '../context/DataContext'
 import SplitButton from './Buttons/SplitButton'
 import { VisitTaskOption } from './VisitTaskOption'
 
 export default function VisitTasks() {
-  const { taskTypes } = useData()
-  const { tasks, setTasks } = useVisit()
+  const { tasks, setTasks, taskTypes } = useVisit()
   const [options, setOptions] = useState([])
   const [taskOptions, setTaskOptions] = useState([])
 
   const initOptions = () => {
     const options = taskTypes
       .filter(
-        ({ id }) =>
+        ({ taskTypeName }) =>
           !tasks.find(
-            (task) => task?.taskType?.id === id && !task.isMarkedForDeletion
+            (task) =>
+              task?.taskType?.taskTypeName === taskTypeName &&
+              !task.isMarkedForDeletion
           )
       )
       .map(({ taskTypeName: name, id }) => ({
