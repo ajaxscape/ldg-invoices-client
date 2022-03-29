@@ -7,11 +7,10 @@ import { PageTitle } from '../../../fragments/PageTitle'
 import { NavButtons } from '../../../fragments/Buttons/NavButtons'
 import { useRouteMatch } from 'react-router-dom'
 import { VisitCard } from '../../../fragments/VisitCard'
-import { useData } from '../../../context/DataContext'
 
 export default function VisitFinish({ customerId, visitId }) {
-  const { taskTypes } = useData()
-  const { visitDateTime, tasks, setTasks, durationInMinutes } = useVisit()
+  const { visitDateTime, tasks, setTasks, durationInMinutes, taskTypes } =
+    useVisit()
   const { visitDate } = visitDateTime || {}
 
   let match = useRouteMatch()
@@ -25,7 +24,7 @@ export default function VisitFinish({ customerId, visitId }) {
   const continueTo = path.substring(0, path.lastIndexOf('/Edit/') + 6) + 'Save'
 
   useEffect(() => {
-    if (tasks && !tasks.length && durationInMinutes) {
+    if (tasks && !tasks.length && durationInMinutes && taskTypes?.length) {
       const taskType = taskTypes[0]
       const { taskTypeName: taskName, price } = taskType
       const hours = durationInMinutes % 60
@@ -39,7 +38,7 @@ export default function VisitFinish({ customerId, visitId }) {
       }
       setTasks([task])
     }
-  }, [durationInMinutes])
+  }, [durationInMinutes, taskTypes])
 
   return (
     <>

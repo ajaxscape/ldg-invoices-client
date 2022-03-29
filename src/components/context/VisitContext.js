@@ -17,10 +17,17 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
   const [durationInMinutes, setDurationInMinutes] = useState(0)
   const [property, setProperty] = useState()
   const [tasks, setTasks] = useState()
+  const [taskTypes, setTaskTypes] = useState()
   const [visitDateTime, setVisitDateTime] = useState({})
   const { getVisitById, getCustomerById, saveVisit } = useData()
 
   useEffect(() => {
+    if (customerId) {
+      const customer = getCustomerById(customerId)
+      if (customer?.customerTaskTypes?.length) {
+        setTaskTypes(customer.customerTaskTypes)
+      }
+    }
     let visit
     if (visitId) {
       visit = getVisitById(visitId)
@@ -124,6 +131,7 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
       value={{
         tasks,
         setTasks,
+        taskTypes,
         property,
         setProperty,
         visitDateTime,
