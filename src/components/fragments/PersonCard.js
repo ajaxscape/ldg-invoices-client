@@ -88,15 +88,17 @@ export function PersonCard({ isBillPayer, editLink, onDelete }) {
                 >
                   <PhoneIcon />
                 </IconButton>
-                <IconButton
-                  edge="end"
-                  variant="contained"
-                  color={'primary'}
-                  onClick={handleTextClick}
-                  tabIndex={0}
-                >
-                  <SmsIcon />
-                </IconButton>
+                {phone.startsWith('07') && (
+                  <IconButton
+                    edge="end"
+                    variant="contained"
+                    color={'primary'}
+                    onClick={handleTextClick}
+                    tabIndex={0}
+                  >
+                    <SmsIcon />
+                  </IconButton>
+                )}
               </>
             )}
             {!!email && (
