@@ -1,6 +1,7 @@
 import { Card, CardContent, Grid, IconButton } from '@mui/material'
 import clsx from 'clsx'
 import PhoneIcon from '@mui/icons-material/Phone'
+import SmsIcon from '@mui/icons-material/Sms'
 import EmailIcon from '@mui/icons-material/Email'
 import { Link } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
@@ -51,6 +52,10 @@ export function PersonCard({ isBillPayer, editLink, onDelete }) {
     window.location.href = `tel:${phone}`
   }
 
+  const handleTextClick = () => {
+    window.location.href = `sms:${phone}`
+  }
+
   const handleDeleteRequest = () => {
     setDeleteModelOpen(true)
   }
@@ -73,15 +78,26 @@ export function PersonCard({ isBillPayer, editLink, onDelete }) {
           </CardContent>
           <div className={classes.buttons}>
             {!!phone && (
-              <IconButton
-                edge="end"
-                variant="contained"
-                color={'primary'}
-                onClick={handlePhoneClick}
-                tabIndex={0}
-              >
-                <PhoneIcon />
-              </IconButton>
+              <>
+                <IconButton
+                  edge="end"
+                  variant="contained"
+                  color={'primary'}
+                  onClick={handlePhoneClick}
+                  tabIndex={0}
+                >
+                  <PhoneIcon />
+                </IconButton>
+                <IconButton
+                  edge="end"
+                  variant="contained"
+                  color={'primary'}
+                  onClick={handleTextClick}
+                  tabIndex={0}
+                >
+                  <SmsIcon />
+                </IconButton>
+              </>
             )}
             {!!email && (
               <IconButton
