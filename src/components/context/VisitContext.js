@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useData } from './DataContext'
 import { format } from 'date-fns'
 import nearestDateTime from '../../utilities/nearestDateTime'
+import maxRelativeDateTime from "../../utilities/maxRelativeDateTime";
 
 export const VisitContext = React.createContext(undefined)
 
@@ -39,7 +40,7 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
         startTime: new Date(`${visitDate} ${startTime}`),
         finishTime: tasks?.length
           ? new Date(`${visitDate} ${finishTime}`)
-          : nearestDateTime(15),
+          : maxRelativeDateTime(nearestDateTime(15), new Date(`${visitDate} ${startTime}`))
       })
       setProperty({ ...property })
       setTasks([...tasks])

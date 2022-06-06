@@ -6,17 +6,8 @@ import { useParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
 import { CustomerDetails } from '../../fragments/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
-import { sort } from '../../../utilities/sort'
+import { visitSort } from "../../../utilities/sort";
 import VisitGroup from '../../fragments/VisitGroup'
-
-const visitSort = (
-  { visitDate: dateA, startTime: timeA },
-  { visitDate: dateB, startTime: timeB }
-) =>
-  sort(
-    new Date(`${dateB} ${timeB}`).valueOf(),
-    new Date(`${dateA} ${timeA}`).valueOf()
-  )
 
 export default function Visits() {
   const { getVisits } = useData()

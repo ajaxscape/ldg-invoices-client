@@ -7,3 +7,12 @@ export const sort = (a, b) => {
   }
   return 0
 }
+
+export const visitSort = (
+  { visitDate: dateA, startTime: timeA },
+  { visitDate: dateB, startTime: timeB }
+) =>
+  sort(
+    new Date(`${dateB} ${timeB}`).valueOf(),
+    new Date(`${dateA} ${timeA}`).valueOf()
+  )
