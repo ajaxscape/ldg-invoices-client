@@ -4,6 +4,35 @@ import React, { useState } from 'react'
 import { StyledModal } from './StyledModal'
 import DeleteIcon from '@mui/icons-material/Delete'
 import FormLabel from '@mui/material/FormLabel'
+import { styled } from "@mui/material/styles";
+
+const PREFIX = 'LdgApp-Visit-Task-Option'
+
+const classes = {
+  visitTaskOption: `${PREFIX}-option`,
+  visitTaskOptionLabel: `${PREFIX}-option-label`,
+  visitTaskOptionDeleteButton: `${PREFIX}-option-delete-button`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`.${classes.visitTaskOption}`]: {
+    position: 'relative',
+    backgroundColor: '#fde9c7',
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(1),
+  },
+  [`.${classes.visitTaskOptionLabel}`]: {
+    fontWeight: 'bold',
+    display: 'block'
+  },
+  [`.${classes.visitTaskOptionDeleteButton}`]: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+  },
+}))
 
 export function VisitTaskOption({ taskOption, onDelete, onChange }) {
   const { taskName, id, taskType, hours, minutes, description, price } =
@@ -26,11 +55,12 @@ export function VisitTaskOption({ taskOption, onDelete, onChange }) {
   }
 
   return (
-    <>
-      <Grid item xs={12} sm={6} md={4}>
-        <FormLabel>{taskName}:</FormLabel>
+    <Root>
+      <Grid item xs={12} sm={6} md={4} className={classes.visitTaskOption}>
+        <FormLabel className={classes.visitTaskOptionLabel}>{taskName}:</FormLabel>
         <IconButton
           id={`${id}-delete`}
+          className={classes.visitTaskOptionDeleteButton}
           variant="contained"
           color={'primary'}
           onClick={handleDeleteRequest}
@@ -96,6 +126,6 @@ export function VisitTaskOption({ taskOption, onDelete, onChange }) {
         title="Are you sure you want to remove this task?"
         onClickYes={handleDelete}
       />
-    </>
+    </Root>
   )
 }
