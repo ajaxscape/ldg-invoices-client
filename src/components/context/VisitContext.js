@@ -88,7 +88,8 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
   }, [totalHours])
 
   useEffect(() => {
-    setTimeRested(formatTime(durationInMinutes - totalHours * 60))
+    const timeRestedInMinutes = durationInMinutes - totalHours * 60
+    setTimeRested(timeRestedInMinutes ? formatTime(timeRestedInMinutes) : '')
   }, [totalHours, durationInMinutes])
 
   useEffect(() => {

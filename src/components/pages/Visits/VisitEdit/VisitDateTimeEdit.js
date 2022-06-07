@@ -63,7 +63,7 @@ export default function VisitDateTimeEdit(params) {
       <Grid item xs={12}>
         <VisitStatus label="Time worked" value={timeWorked} />
         <VisitStatus label="Length of visit" value={duration} />
-        <VisitStatus label="Unaccounted time" value={timeRested} />
+        {timeRested && <VisitStatus label="Unaccounted time" value={timeRested} />}
       </Grid>
     </VisitEditView>
   )
