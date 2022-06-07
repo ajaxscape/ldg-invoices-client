@@ -5,6 +5,14 @@ import { useVisit } from '../../../context/VisitContext'
 import { Grid, Typography } from '@mui/material'
 import VisitTasks from '../../../fragments/VisitTasks'
 
+function VisitStatus({label, value}) {
+  return (
+    <Typography variant="h6" paddingY paddingX>
+      {label}:<br /><small>{value}</small>
+    </Typography>
+  )
+}
+
 export default function VisitDateTimeEdit(params) {
   const {
     visitDateTime,
@@ -53,15 +61,9 @@ export default function VisitDateTimeEdit(params) {
     >
       <VisitTasks />
       <Grid item xs={12}>
-        <Typography variant="h6" paddingY paddingX>
-          Time worked: {timeWorked}
-        </Typography>
-        <Typography variant="h6" paddingY paddingX>
-          Length of visit: {duration}
-        </Typography>
-        <Typography variant="h6" paddingY paddingX>
-          Unaccounted time: {timeRested}
-        </Typography>
+        <VisitStatus label="Time worked" value={timeWorked} />
+        <VisitStatus label="Length of visit" value={duration} />
+        <VisitStatus label="Unaccounted time" value={timeRested} />
       </Grid>
     </VisitEditView>
   )

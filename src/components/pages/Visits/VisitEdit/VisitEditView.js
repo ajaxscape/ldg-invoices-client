@@ -9,6 +9,27 @@ import MenuGroup from '../../../fragments/MenuGroup'
 import nearestDateTime from '../../../../utilities/nearestDateTime'
 import { StyledModal } from '../../../fragments/StyledModal'
 import { CustomerDetails } from '../../../fragments/CustomerDetails'
+import { styled } from "@mui/material/styles";
+
+const PREFIX = 'LdgApp-Visit-Edit-View'
+
+const classes = {
+  visitForm: `${PREFIX}-form`,
+  visitFormField: `${PREFIX}-form-field`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`.${classes.visitForm}`]: {
+    backgroundColor: '#fde9c7',
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(1),
+  },
+  [`.${classes.visitFormField}`]: {
+    marginTop: theme.spacing(2),
+  },
+}))
 
 export default function VisitEditView({
   children,
@@ -68,26 +89,31 @@ export default function VisitEditView({
               subHeading || path.substring(path.lastIndexOf('/') + 1)
             }:`}
           >
-            {fields.map(
-              ({ field, label, type, options, nowOrPast, roundedMinutes }) => {
-                return (
-                  <Grid key={field} item xs={12} sm={6} md={4}>
-                    <FormField
-                      name={field}
-                      label={label}
-                      value={data[field] ?? ''}
-                      onChange={handleChange}
-                      type={type}
-                      options={options}
-                      minutesStep={roundedMinutes}
-                      maxDate={
-                        nowOrPast ? nearestDateTime(roundedMinutes) : null
-                      }
-                    />
-                  </Grid>
-                )
-              }
-            )}
+
+            <Root>
+              <Grid item xs={12} sm={6} md={4} className={classes.visitForm}>
+              {fields.map(
+                ({ field, label, type, options, nowOrPast, roundedMinutes }, index) => {
+                  return (
+                    <Grid key={field} item xs={12} sm={6} md={4} className={index && classes.visitFormField}>
+                      <FormField
+                        name={field}
+                        label={label}
+                        value={data[field] ?? ''}
+                        onChange={handleChange}
+                        type={type}
+                        options={options}
+                        minutesStep={roundedMinutes}
+                        maxDate={
+                          nowOrPast ? nearestDateTime(roundedMinutes) : null
+                        }
+                      />
+                    </Grid>
+                  )
+                }
+              )}
+              </Grid>
+            </Root>
           </MenuGroup>
         )}
         {children}
