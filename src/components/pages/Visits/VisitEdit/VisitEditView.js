@@ -95,7 +95,7 @@ export default function VisitEditView({
               {fields.map(
                 ({ field, label, type, options, nowOrPast, roundedMinutes }, index) => {
                   return (
-                    <Grid key={field} item xs={12} sm={6} md={4} className={index && classes.visitFormField}>
+                    <Grid key={field} item xs={12} sm={6} md={4} className={index ? classes.visitFormField : ''}>
                       <FormField
                         name={field}
                         label={label}
