@@ -33,7 +33,7 @@ export const DataProvider = ({ children }) => {
     }
   }
 
-  const { data } = useFetch(`${apiUrl}/customers`, {
+  const { data } = useFetch(`${apiUrl}/api/customers?includeVisits=true`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
