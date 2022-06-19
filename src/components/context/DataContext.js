@@ -94,7 +94,7 @@ export const DataProvider = ({ children }) => {
       console.log(`Saving: ${title} ${firstName} ${lastName}`)
 
       const response = await fetch(
-        `${apiUrl}/customers`,
+        `${apiUrl}/api/customers`,
         getRequestOptions({ body: customerToSave })
       )
 
