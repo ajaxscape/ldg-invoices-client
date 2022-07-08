@@ -1,11 +1,13 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { useAuthentication } from '../context/AuthenticationContext'
 
 function ccyFormat(num) {
   return `£${num.toFixed(2)}`
 }
 
 function VisitTaskRow({ task }) {
+  const { isManager } = useAuthentication()
   return (
     <>
       {task?.quantity ? (
@@ -22,9 +24,11 @@ function VisitTaskRow({ task }) {
           <TableCell style={{ padding: 0 }} align="right">
             {task.quantity && task.taskType ? task.quantity.toFixed(2) : ''}
           </TableCell>
-          <TableCell style={{ padding: 0 }} align="right">
-            {task.price ? ccyFormat(task.price * task.quantity) : ''}
-          </TableCell>
+          {isManager && (
+            <TableCell style={{ padding: 0 }} align="right">
+              {task.price ? ccyFormat(task.price * task.quantity) : ''}
+            </TableCell>
+          )}
         </TableRow>
       ) : null}
     </>
@@ -32,6 +36,7 @@ function VisitTaskRow({ task }) {
 }
 
 export function VisitTaskTable({ tasks }) {
+  const { isManager } = useAuthentication()
   return (
     <>
       <br />
@@ -44,9 +49,14 @@ export function VisitTaskTable({ tasks }) {
             <TableCell style={{ padding: 0, fontWeight: 'bold' }} align="right">
               Hours
             </TableCell>
-            <TableCell style={{ padding: 0, fontWeight: 'bold' }} align="right">
-              Cost
-            </TableCell>
+            {isManager && (
+              <TableCell
+                style={{ padding: 0, fontWeight: 'bold' }}
+                align="right"
+              >
+                Cost
+              </TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -66,17 +76,20 @@ export function VisitTaskTable({ tasks }) {
               colSpan={2}
               align="right"
             >
-              Total
+              {isManager && <>Total</>}
             </TableCell>
-            <TableCell style={{ padding: 0 }} align="right">
-              {ccyFormat(
-                tasks.reduce(
-                  (total, { quantity, price }) =>
-                    quantity ? total + quantity * price : total,
-                  0
-                )
-              )}
-            </TableCell>
+
+            {isManager && (
+              <TableCell style={{ padding: 0 }} align="right">
+                {ccyFormat(
+                  tasks.reduce(
+                    (total, { quantity, price }) =>
+                      quantity ? total + quantity * price : total,
+                    0
+                  )
+                )}
+              </TableCell>
+            )}
           </TableRow>
         </TableBody>
       </Table>

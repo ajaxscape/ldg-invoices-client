@@ -10,6 +10,7 @@ import MenuGroup from '../../fragments/MenuGroup'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { v4 as uuid } from 'uuid'
 import { sort } from '../../../utilities/sort'
+import { useAuthentication } from '../../context/AuthenticationContext'
 
 function ViewCustomerRow({ customer }) {
   const { id = '', title = '', firstName = '', lastName = '' } = customer || {}
@@ -26,6 +27,7 @@ function ViewCustomerRow({ customer }) {
 
 export default function Customers() {
   const { customers } = useData()
+  const { isManager } = useAuthentication()
   const [sortedCustomers, setSortedCustomers] = useState([])
   const [allCustomers, setAllCustomers] = useState(false)
   const dateLess15 = new Date()
@@ -93,11 +95,13 @@ export default function Customers() {
         <MenuButton label="All Customers" onClick={handleAllCustomers} />
       )}
 
-      <MenuButton
-        to={`/Customers/${uuid()}/Edit`}
-        icon={AddIcon}
-        label="New Customer"
-      />
+      {isManager && (
+        <MenuButton
+          to={`/Customers/${uuid()}/Edit`}
+          icon={AddIcon}
+          label="New Customer"
+        />
+      )}
 
       <NavButtons backTo="/Home" />
     </Grid>

@@ -13,9 +13,11 @@ import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
 import { useData } from '../../context/DataContext'
 import VisitGroup from '../../fragments/VisitGroup'
+import { useAuthentication } from '../../context/AuthenticationContext'
 
 export default function Customer() {
   const { getCustomerById, getVisits } = useData()
+  const { isManager } = useAuthentication()
   const { customerId } = useParams()
   const [visitsForInvoice, setVisitsForInvoice] = useState([])
   const [currentVisit, setCurrentVisit] = useState()
@@ -56,7 +58,7 @@ export default function Customer() {
             />
           )}
 
-          {!!customerId && (
+          {isManager && !!customerId && (
             <>
               {!!visitsForInvoice?.some(({ tasks = [] }) => tasks.length) && (
                 <MenuButton
@@ -73,14 +75,15 @@ export default function Customer() {
             icon={NaturePeopleIcon}
             label="Visits"
           />
+          {isManager && (
+            <MenuButton
+              to={`/Customers/${customerId}/Invoices`}
+              icon={ReceiptIcon}
+              label="Invoices"
+            />
+          )}
 
-          <MenuButton
-            to={`/Customers/${customerId}/Invoices`}
-            icon={ReceiptIcon}
-            label="Invoices"
-          />
-
-          {!customer?.billPayer && (
+          {isManager && !customer?.billPayer && (
             <MenuButton
               to={`/Customers/${customerId}/BillPayer/${uuid()}/Edit`}
               icon={AddIcon}

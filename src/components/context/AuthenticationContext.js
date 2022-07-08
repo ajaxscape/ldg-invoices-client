@@ -17,6 +17,7 @@ export const AuthenticationProvider = ({ children }) => {
   const [user, setUser] = useState({})
   const [token, setToken] = useState(localStorage.getItem('authToken'))
   const [authenticating, setAuthenticating] = useState(false)
+  const [isManager, setIsManager] = useState(false)
   const isDevelopment = process.env.REACT_APP_ENVIRONMENT === 'development'
 
   const isAuthenticated = () => {
@@ -48,6 +49,10 @@ export const AuthenticationProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('authToken', token)
   }, [token])
+
+  useEffect(() => {
+    setIsManager(['Admin', 'Manager'].includes(user?.role?.roleName))
+  }, [user])
 
   const onLogoutSuccess = () => {
     setUser({})
@@ -128,6 +133,7 @@ export const AuthenticationProvider = ({ children }) => {
         token,
         authenticating,
         isAuthenticated,
+        isManager,
       }}
     >
       {children}

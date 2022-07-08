@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
 import { PersonCard } from './PersonCard'
 import { PersonProvider } from '../context/PersonContext'
+import { useAuthentication } from '../context/AuthenticationContext'
 
 const PREFIX = 'LdgApp-Customer-Details'
 
@@ -21,6 +22,7 @@ const Root = styled('div')(({ theme }) => ({
 
 export function CustomerDetails({ edit, showBillPayer }) {
   const data = useData()
+  const { isManager } = useAuthentication()
   const { customerId } = useParams()
   const [customer, setCustomer] = useState()
 
@@ -39,11 +41,13 @@ export function CustomerDetails({ edit, showBillPayer }) {
         <PersonProvider customerId={customerId}>
           <PersonCard
             person={customer}
-            editLink={edit ? `/Customers/${customerId}/Edit` : null}
+            editLink={
+              isManager && edit ? `/Customers/${customerId}/Edit` : null
+            }
           />
         </PersonProvider>
       )}
-      {!!showBillPayer && !!customer?.billPayer && (
+      {isManager && !!showBillPayer && !!customer?.billPayer && (
         <>
           <Typography variant="h6" className={classes.label}>
             Bill payer:

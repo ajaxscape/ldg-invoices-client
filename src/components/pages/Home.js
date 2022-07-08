@@ -9,9 +9,11 @@ import { MenuButton } from '../fragments/Buttons/MenuButton'
 import { useData } from '../context/DataContext'
 import VisitGroup from '../fragments/VisitGroup'
 import Loader from '../fragments/Loader'
+import { useAuthentication } from '../context/AuthenticationContext'
 
 export default function Home() {
   const { getVisits, loading } = useData()
+  const { isManager } = useAuthentication()
   const [currentVisit, setCurrentVisit] = useState()
 
   useEffect(() => {
@@ -35,7 +37,9 @@ export default function Home() {
 
           <MenuButton to="/Customers" icon={PeopleIcon} label="Customers" />
           <MenuButton to="/Visits" icon={NaturePeopleIcon} label="Visits" />
-          <MenuButton to="/Invoices" icon={ReceiptIcon} label="Invoices" />
+          {isManager && (
+            <MenuButton to="/Invoices" icon={ReceiptIcon} label="Invoices" />
+          )}
         </Grid>
       ) : (
         <Loader />
