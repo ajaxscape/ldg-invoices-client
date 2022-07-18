@@ -8,11 +8,20 @@ import CustomerEdit from './components/pages/Customers/CustomerEdit/CustomerEdit
 import Logout from './components/pages/Logout'
 import VisitEdit from './components/pages/Visits/VisitEdit/VisitEdit'
 import InvoiceEdit from './components/pages/Invoices/InvoiceEdit/InvoiceEdit'
+import Bookings from './components/pages/Bookings/Bookings'
 
 const routes = [
   {
     path: 'Home',
     component: Home,
+    exact: true,
+  },
+
+  // Bookings
+  // ******
+  {
+    path: 'Bookings',
+    component: Bookings,
     exact: true,
   },
 
@@ -79,6 +88,11 @@ const routes = [
   {
     path: `Customers/:customerId/Visits/:visitId/Edit`,
     component: VisitEdit,
+  },
+  {
+    path: `Customers/:customerId/Bookings`,
+    component: Bookings,
+    exact: true,
   },
 
   // Logout

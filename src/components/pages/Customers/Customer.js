@@ -7,12 +7,13 @@ import Loader from '../../fragments/Loader'
 import PersonIcon from '@mui/icons-material/Person'
 import { PageTitle } from '../../fragments/PageTitle'
 import { MenuButton } from '../../fragments/Buttons/MenuButton'
-import { CustomerDetails } from '../../fragments/CustomerDetails'
+import { CustomerDetails } from '../../fragments/Customer/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { v4 as uuid } from 'uuid'
 import AddIcon from '@mui/icons-material/Add'
+import EventIcon from '@mui/icons-material/Event'
 import { useData } from '../../context/DataContext'
-import VisitGroup from '../../fragments/VisitGroup'
+import VisitGroup from '../../fragments/Visit/VisitGroup'
 import { useAuthentication } from '../../context/AuthenticationContext'
 
 export default function Customer() {
@@ -82,6 +83,12 @@ export default function Customer() {
               label="Invoices"
             />
           )}
+
+          <MenuButton
+            to={`/Customers/${customerId}/Bookings`}
+            icon={EventIcon}
+            label="Bookings"
+          />
 
           {isManager && !customer?.billPayer && (
             <MenuButton

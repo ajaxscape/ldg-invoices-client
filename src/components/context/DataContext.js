@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import useFetch from 'react-fetch-hook'
 import { v4 as uuid } from 'uuid'
 import { sort } from '../../utilities/sort'
-import { useAuthentication } from './AuthenticationContext'
 import { useGlobal } from './GlobalContext'
 
 export const DataContext = React.createContext(undefined)
@@ -11,16 +10,21 @@ export const useData = () => useContext(DataContext)
 
 const apiUrl = process.env.REACT_APP_API
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ children, isManager, token, user }) => {
   const updated = useRef([])
-  const { token } = useAuthentication()
 
+  const [bookings, setBookings] = useState([])
   const [taskTypes, setTaskTypes] = useState([])
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
   const [customerToSave, setCustomerToSave] = useState()
   const [syncTick, setSyncTick] = useState(0)
   const { setSyncing, setError } = useGlobal()
+
+  const decorateUrl = (url) =>
+    !!isManager
+      ? url
+      : `${url}${url.includes('?') ? '&' : '?'}userEmail=${user.email}`
 
   const getRequestOptions = ({ body }) => {
     return {
@@ -33,29 +37,41 @@ export const DataProvider = ({ children }) => {
     }
   }
 
-  const { data } = useFetch(`${apiUrl}/api/customers?includeVisits=true`, {
+  const { data: customerData } = useFetch(
+    decorateUrl(`${apiUrl}/api/customers?includeVisits=true`),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+
+  const { data: taskTypeData } = useFetch(decorateUrl(`${apiUrl}/task-types`), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
 
-  const { data: taskTypeData } = useFetch(`${apiUrl}/task-types`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  const { data: bookingData } = useFetch(
+    decorateUrl(`${apiUrl}/api/bookings?includeVisits=true&includeUsers=true`),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
 
   useEffect(() => {
-    if (Array.isArray(data)) {
+    if (Array.isArray(customerData)) {
       setCustomers((customers) => {
         return [
           // All the customers not returned from the fetch
           ...customers.filter(
             ({ id }) =>
-              !data.find((fetchedCustomer) => fetchedCustomer.id === id)
+              !customerData.find((fetchedCustomer) => fetchedCustomer.id === id)
           ),
           // All the customers returned from the fetch
-          ...data.map((fetchedCustomer) => {
+          ...customerData.map((fetchedCustomer) => {
             const currentCustomer = customers.find(
               ({ id }) => id === fetchedCustomer.id
             )
@@ -71,13 +87,19 @@ export const DataProvider = ({ children }) => {
       })
       setLoading(false)
     }
-  }, [data])
+  }, [customerData])
 
   useEffect(() => {
     if (Array.isArray(taskTypeData)) {
       setTaskTypes(taskTypeData)
     }
   }, [taskTypeData])
+
+  useEffect(() => {
+    if (Array.isArray(bookingData)) {
+      setBookings(bookingData)
+    }
+  }, [bookingData])
 
   const syncCustomer = (customerId) => {
     if (!updated.current.includes(customerId)) {
@@ -261,6 +283,19 @@ export const DataProvider = ({ children }) => {
     setCustomerToSave({ ...customer, invoices: [...invoices] })
   }
 
+  const getBookingById = (bookingId) => {
+    return bookings.find(({ id }) => id === bookingId)
+  }
+
+  const getBookings = (params = {}) => {
+    const { customerId } = params
+    return bookings.filter(
+      (booking) => !customerId || booking.property.customer.id === customerId
+      // (!customerId || booking.property.customer.id === customerId) &&
+      // booking.visits.length === 0
+    )
+  }
+
   useEffect(() => {
     if (customerToSave) {
       saveCustomer(customerToSave)
@@ -273,6 +308,7 @@ export const DataProvider = ({ children }) => {
       value={{
         customers,
         taskTypes,
+        bookings,
         getCustomerById,
         getCustomerByInvoiceId,
         saveCustomer,
@@ -282,6 +318,8 @@ export const DataProvider = ({ children }) => {
         getVisits,
         getVisitById,
         saveVisit,
+        getBookingById,
+        getBookings,
         loading,
       }}
     >

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useData } from '../context/DataContext'
+import { useData } from '../../context/DataContext'
 import { styled } from '@mui/material/styles'
 import { VisitCard } from './VisitCard'
-import { VisitProvider } from '../context/VisitContext'
+import { VisitProvider } from '../../context/VisitContext'
 
 const PREFIX = 'LdgApp-Visit-Details'
 

@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useData } from '../context/DataContext'
+import { useData } from '../../context/DataContext'
 import { useParams } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
-import { PersonCard } from './PersonCard'
-import { PersonProvider } from '../context/PersonContext'
-import { useAuthentication } from '../context/AuthenticationContext'
+import { PersonCard } from '../PersonCard'
+import { PersonProvider } from '../../context/PersonContext'
+import { useAuthentication } from '../../context/AuthenticationContext'
 
 const PREFIX = 'LdgApp-Customer-Details'
 

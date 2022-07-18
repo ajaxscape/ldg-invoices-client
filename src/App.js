@@ -14,7 +14,6 @@ import ForgotPassword from './components/pages/ForgotPassword'
 import NoFoundComponent from './components/pages/NotFoundComponent'
 import { AuthenticationProvider } from './components/context/AuthenticationContext'
 import ScrollToTop from './components/fragments/ScrollToTop'
-import { DataProvider } from './components/context/DataContext'
 
 const PREFIX = 'LdgApp'
 
@@ -57,9 +56,7 @@ const App = () => {
                   <ForgotPassword />
                 </PublicRoute>
                 <PrivateRoute path="/">
-                  <DataProvider>
-                    <ProtectedRoutes />
-                  </DataProvider>
+                  <ProtectedRoutes />
                 </PrivateRoute>
                 <Route path="*">
                   <NoFoundComponent />

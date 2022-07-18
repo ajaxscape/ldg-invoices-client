@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import routes from '../routes' // Route list
 import NotFoundComponent from '../components/pages/NotFoundComponent'
 
@@ -9,6 +9,13 @@ const ProtectedRoutes = () => (
         <Component path={path} title={title} />
       </Route>
     ))}
+    <Route
+      path="/"
+      exact={true}
+      render={({ location }) => (
+        <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      )}
+    />
     <Route component={NotFoundComponent} />
   </Switch>
 )

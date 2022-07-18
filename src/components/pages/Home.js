@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react'
 import NaturePeopleIcon from '@mui/icons-material/NaturePeople'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import PeopleIcon from '@mui/icons-material/People'
+import EventIcon from '@mui/icons-material/Event'
 import { PageTitle } from '../fragments/PageTitle'
 import { MenuButton } from '../fragments/Buttons/MenuButton'
 import { useData } from '../context/DataContext'
-import VisitGroup from '../fragments/VisitGroup'
+import VisitGroup from '../fragments/Visit/VisitGroup'
 import Loader from '../fragments/Loader'
 import { useAuthentication } from '../context/AuthenticationContext'
 
@@ -35,10 +36,13 @@ export default function Home() {
             <VisitGroup visits={[currentVisit]} label="Current visit:" />
           )}
 
-          <MenuButton to="/Customers" icon={PeopleIcon} label="Customers" />
-          <MenuButton to="/Visits" icon={NaturePeopleIcon} label="Visits" />
+          <MenuButton to="/Bookings" icon={EventIcon} label="Bookings" />
           {isManager && (
-            <MenuButton to="/Invoices" icon={ReceiptIcon} label="Invoices" />
+            <>
+              <MenuButton to="/Customers" icon={PeopleIcon} label="Customers" />
+              <MenuButton to="/Visits" icon={NaturePeopleIcon} label="Visits" />
+              <MenuButton to="/Invoices" icon={ReceiptIcon} label="Invoices" />
+            </>
           )}
         </Grid>
       ) : (

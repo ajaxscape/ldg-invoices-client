@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import domPurify from 'dompurify'
-import Loader from './Loader'
-import { useAuthentication } from '../context/AuthenticationContext'
+import Loader from '../Loader'
+import { useAuthentication } from '../../context/AuthenticationContext'
 
 export default function PrintedInvoice({ invoiceNumber, setLoading }) {
   const [response, setResponse] = useState()

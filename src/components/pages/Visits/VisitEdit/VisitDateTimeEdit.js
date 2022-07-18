@@ -3,12 +3,13 @@ import { dateTimeFields } from '../../../../constants/fields'
 import VisitEditView from './VisitEditView'
 import { useVisit } from '../../../context/VisitContext'
 import { Grid, Typography } from '@mui/material'
-import VisitTasks from '../../../fragments/VisitTasks'
+import VisitTasks from '../../../fragments/Visit/VisitTasks'
 
-function VisitStatus({label, value}) {
+function VisitStatus({ label, value }) {
   return (
     <Typography variant="h6" paddingY paddingX>
-      {label}:<br /><small>{value}</small>
+      {label}:<br />
+      <small>{value}</small>
     </Typography>
   )
 }
@@ -63,7 +64,9 @@ export default function VisitDateTimeEdit(params) {
       <Grid item xs={12}>
         <VisitStatus label="Time worked" value={timeWorked} />
         <VisitStatus label="Length of visit" value={duration} />
-        {timeRested && <VisitStatus label="Unaccounted time" value={timeRested} />}
+        {timeRested && (
+          <VisitStatus label="Unaccounted time" value={timeRested} />
+        )}
       </Grid>
     </VisitEditView>
   )

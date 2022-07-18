@@ -1,10 +1,10 @@
 import { Grid, IconButton } from '@mui/material'
-import FormField from './FormField'
+import FormField from '../FormField'
 import React, { useState } from 'react'
-import { StyledModal } from './StyledModal'
+import { StyledModal } from '../StyledModal'
 import DeleteIcon from '@mui/icons-material/Delete'
 import FormLabel from '@mui/material/FormLabel'
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles'
 
 const PREFIX = 'LdgApp-Visit-Task-Option'
 
@@ -25,7 +25,7 @@ const Root = styled('div')(({ theme }) => ({
   },
   [`.${classes.visitTaskOptionLabel}`]: {
     fontWeight: 'bold',
-    display: 'block'
+    display: 'block',
   },
   [`.${classes.visitTaskOptionDeleteButton}`]: {
     position: 'absolute',
@@ -57,7 +57,9 @@ export function VisitTaskOption({ taskOption, onDelete, onChange }) {
   return (
     <Root>
       <Grid item xs={12} sm={6} md={4} className={classes.visitTaskOption}>
-        <FormLabel className={classes.visitTaskOptionLabel}>{taskName}:</FormLabel>
+        <FormLabel className={classes.visitTaskOptionLabel}>
+          {taskName}:
+        </FormLabel>
         <IconButton
           id={`${id}-delete`}
           className={classes.visitTaskOptionDeleteButton}

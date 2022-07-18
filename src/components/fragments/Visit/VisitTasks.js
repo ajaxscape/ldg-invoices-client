@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import MenuGroup from './MenuGroup'
-import { useVisit } from '../context/VisitContext'
-import SplitButton from './Buttons/SplitButton'
+import MenuGroup from '../MenuGroup'
+import { useVisit } from '../../context/VisitContext'
+import SplitButton from '../Buttons/SplitButton'
 import { VisitTaskOption } from './VisitTaskOption'
 
 export default function VisitTasks() {

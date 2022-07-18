@@ -33,39 +33,34 @@ export default function Customers() {
   const dateLess15 = new Date()
   dateLess15.setDate(dateLess15.getDate() - 15)
 
+  function sortCustomersByLastUpdate(customer) {
+    const { address, updatedAt, invoices, visitsYetToBeInvoiced, ...rest } =
+      customer
+
+    const dates = [
+      updatedAt,
+      address.updatedAt,
+      ...invoices.map(({ updatedAt }) => updatedAt),
+      ...visitsYetToBeInvoiced.map(({ updatedAt }) => updatedAt),
+    ].map((date) => new Date(date))
+
+    const updated = dates.sort((dateB, dateA) => sort(dateA, dateB))[0]
+
+    return {
+      ...rest,
+      updated,
+    }
+  }
+
+  const byFullName = (
+    { firstName: fa, lastName: la },
+    { firstName: fb, lastName: lb }
+  ) => sort(`${fa}--${la}`, `${fb}--${lb}`)
+
   useEffect(() => {
     if (customers?.length) {
       setSortedCustomers(
-        customers
-          .map(
-            ({
-              address,
-              updatedAt,
-              invoices,
-              visitsYetToBeInvoiced,
-              ...customer
-            }) => {
-              const dates = [
-                updatedAt,
-                address.updatedAt,
-                ...invoices.map(({ updatedAt }) => updatedAt),
-                ...visitsYetToBeInvoiced.map(({ updatedAt }) => updatedAt),
-              ].map((date) => new Date(date))
-              const updated = dates.sort((dateB, dateA) =>
-                sort(dateA, dateB)
-              )[0]
-              return {
-                ...customer,
-                updated,
-              }
-            }
-          )
-          .sort(
-            (
-              { firstName: fa, lastName: la },
-              { firstName: fb, lastName: lb }
-            ) => sort(`${fa}--${la}`, `${fb}--${lb}`)
-          )
+        customers.map(sortCustomersByLastUpdate).sort(byFullName)
       )
     }
   }, [customers])

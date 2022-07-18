@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
-import { useAuthentication } from '../context/AuthenticationContext'
+import { useAuthentication } from '../../context/AuthenticationContext'
 
 function ccyFormat(num) {
   return `£${num.toFixed(2)}`

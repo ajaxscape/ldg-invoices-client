@@ -1,15 +1,12 @@
 import { Button, Card, CardContent, Grid, IconButton } from '@mui/material'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
-import { useVisit } from '../context/VisitContext'
-import { FullAddress } from './FullAddress'
-import { format } from 'date-fns'
-import formatName from '../../utilities/formatName'
-import { useData } from '../context/DataContext'
+import { useVisit } from '../../context/VisitContext'
 import { VisitTaskTable } from './VisitTaskTable'
-import formatAddress from '../../utilities/formatAddress'
+import { CustomerCard } from '../Customer/CustomerCard'
+import { VisitDate } from './VisitDate'
 
 const PREFIX = 'LdgApp-Visit-Details'
 
@@ -34,17 +31,10 @@ const Root = styled('div')(({ theme }) => ({
   },
 }))
 
-const formatDate = (date) => format(date, 'dd MMMM yyyy')
-const formatTime = (time) => format(time, 'h:mm a')
-
 export function VisitCard({ editLink, editText, customerId }) {
-  const { customerId: visitCustomerId } = useParams()
-  const { getCustomerById } = useData()
   const { property, tasks, visitDateTime } = useVisit()
-  const { visitDate, startTime, finishTime } = visitDateTime || {}
-  const [displayCard, setDisplayCard] = useState()
-  const [fullName, setFullName] = useState('')
-  const [showAddress, setShowAddress] = useState(false)
+  const { startTime } = visitDateTime || {}
+  const [displayCard, setDisplayCard] = useState(false)
 
   useEffect(() => {
     if (!!startTime && startTime.toDateString() !== 'Invalid Date') {
@@ -52,60 +42,14 @@ export function VisitCard({ editLink, editText, customerId }) {
     }
   }, [startTime])
 
-  useEffect(() => {
-    if (customerId && getCustomerById) {
-      const customer = getCustomerById(customerId)
-      setFullName(formatName(customer))
-      if (visitCustomerId) {
-        if (
-          formatAddress(customer?.address) === formatAddress(property?.address)
-        ) {
-          setShowAddress(false)
-        } else {
-          setShowAddress(true)
-        }
-      } else {
-        setShowAddress(true)
-      }
-    }
-  }, [customerId, getCustomerById])
-
   return (
     <Root>
       {!!displayCard && (
         <Grid item xs={12}>
           <Card className={classes.card}>
             <CardContent>
-              <strong>
-                {!!visitDate && (
-                  <>
-                    {formatDate(visitDate)}
-                    <br />
-                    {formatTime(startTime)}
-                    {formatTime(startTime) !== formatTime(finishTime) && (
-                      <> to {formatTime(finishTime)}</>
-                    )}
-                  </>
-                )}
-              </strong>
-              {!!fullName && (
-                <>
-                  <br />
-                  <br />
-                  {fullName},
-                </>
-              )}
-              {!!property?.address && showAddress && (
-                <>
-                  {!fullName && (
-                    <>
-                      <br />
-                      <br />
-                    </>
-                  )}
-                  <FullAddress address={property.address} />
-                </>
-              )}
+              <VisitDate />
+              <CustomerCard customerId={customerId} property={property} />
               <br />
               {!!tasks?.length ? (
                 <>

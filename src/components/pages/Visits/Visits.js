@@ -4,10 +4,10 @@ import NaturePeopleIcon from '@mui/icons-material/NaturePeople'
 import { PageTitle } from '../../fragments/PageTitle'
 import { useParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
-import { CustomerDetails } from '../../fragments/CustomerDetails'
+import { CustomerDetails } from '../../fragments/Customer/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
-import { visitSort } from "../../../utilities/sort";
-import VisitGroup from '../../fragments/VisitGroup'
+import { visitSort } from '../../../utilities/sort'
+import VisitGroup from '../../fragments/Visit/VisitGroup'
 
 export default function Visits() {
   const { getVisits } = useData()

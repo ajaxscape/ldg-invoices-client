@@ -1,4 +1,4 @@
-import MenuGroup from './MenuGroup'
+import MenuGroup from '../MenuGroup'
 import { VisitDetails } from './VisitDetails'
 import React from 'react'
 

@@ -8,8 +8,8 @@ import { Link, Redirect, useRouteMatch } from 'react-router-dom'
 import MenuGroup from '../../../fragments/MenuGroup'
 import nearestDateTime from '../../../../utilities/nearestDateTime'
 import { StyledModal } from '../../../fragments/StyledModal'
-import { CustomerDetails } from '../../../fragments/CustomerDetails'
-import { styled } from "@mui/material/styles";
+import { CustomerDetails } from '../../../fragments/Customer/CustomerDetails'
+import { styled } from '@mui/material/styles'
 
 const PREFIX = 'LdgApp-Visit-Edit-View'
 
@@ -89,29 +89,38 @@ export default function VisitEditView({
               subHeading || path.substring(path.lastIndexOf('/') + 1)
             }:`}
           >
-
             <Root>
               <Grid item xs={12} sm={6} md={4} className={classes.visitForm}>
-              {fields.map(
-                ({ field, label, type, options, nowOrPast, roundedMinutes }, index) => {
-                  return (
-                    <Grid key={field} item xs={12} sm={6} md={4} className={index ? classes.visitFormField : ''}>
-                      <FormField
-                        name={field}
-                        label={label}
-                        value={data[field] ?? ''}
-                        onChange={handleChange}
-                        type={type}
-                        options={options}
-                        minutesStep={roundedMinutes}
-                        maxDate={
-                          nowOrPast ? nearestDateTime(roundedMinutes) : null
-                        }
-                      />
-                    </Grid>
-                  )
-                }
-              )}
+                {fields.map(
+                  (
+                    { field, label, type, options, nowOrPast, roundedMinutes },
+                    index
+                  ) => {
+                    return (
+                      <Grid
+                        key={field}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        className={index ? classes.visitFormField : ''}
+                      >
+                        <FormField
+                          name={field}
+                          label={label}
+                          value={data[field] ?? ''}
+                          onChange={handleChange}
+                          type={type}
+                          options={options}
+                          minutesStep={roundedMinutes}
+                          maxDate={
+                            nowOrPast ? nearestDateTime(roundedMinutes) : null
+                          }
+                        />
+                      </Grid>
+                    )
+                  }
+                )}
               </Grid>
             </Root>
           </MenuGroup>

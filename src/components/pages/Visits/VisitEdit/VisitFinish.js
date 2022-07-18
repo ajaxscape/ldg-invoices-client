@@ -6,7 +6,7 @@ import { useVisit } from '../../../context/VisitContext'
 import { PageTitle } from '../../../fragments/PageTitle'
 import { NavButtons } from '../../../fragments/Buttons/NavButtons'
 import { useRouteMatch } from 'react-router-dom'
-import { VisitCard } from '../../../fragments/VisitCard'
+import { VisitCard } from '../../../fragments/Visit/VisitCard'
 
 export default function VisitFinish({ customerId, visitId }) {
   const { visitDateTime, tasks, setTasks, durationInMinutes, taskTypes } =

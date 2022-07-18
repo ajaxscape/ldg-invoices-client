@@ -10,7 +10,7 @@ import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import Loader from '../../fragments/Loader'
 import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { StyledModal } from '../../fragments/StyledModal'
-import PrintedInvoice from '../../fragments/PrintedInvoice'
+import PrintedInvoice from '../../fragments/Invoice/PrintedInvoice'
 import { format } from 'date-fns'
 import { useAuthentication } from '../../context/AuthenticationContext'
 

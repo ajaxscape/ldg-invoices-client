@@ -6,7 +6,7 @@ import { MenuButton } from '../../fragments/Buttons/MenuButton'
 import { useParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
 import MenuGroup from '../../fragments/MenuGroup'
-import { CustomerDetails } from '../../fragments/CustomerDetails'
+import { CustomerDetails } from '../../fragments/Customer/CustomerDetails'
 import { NavButtons } from '../../fragments/Buttons/NavButtons'
 import { sort } from '../../../utilities/sort'
 

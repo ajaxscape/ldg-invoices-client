@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useData } from './DataContext'
 import { format } from 'date-fns'
 import nearestDateTime from '../../utilities/nearestDateTime'
-import maxRelativeDateTime from "../../utilities/maxRelativeDateTime";
+import maxRelativeDateTime from '../../utilities/maxRelativeDateTime'
 
 export const VisitContext = React.createContext(undefined)
 
@@ -17,7 +17,7 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
   const [total, setTotal] = useState(0)
   const [durationInMinutes, setDurationInMinutes] = useState(0)
   const [property, setProperty] = useState()
-  const [tasks, setTasks] = useState()
+  const [tasks, setTasks] = useState([])
   const [taskTypes, setTaskTypes] = useState()
   const [visitDateTime, setVisitDateTime] = useState({})
   const { getVisitById, getCustomerById, saveVisit } = useData()
@@ -40,7 +40,10 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
         startTime: new Date(`${visitDate} ${startTime}`),
         finishTime: tasks?.length
           ? new Date(`${visitDate} ${finishTime}`)
-          : maxRelativeDateTime(nearestDateTime(15), new Date(`${visitDate} ${startTime}`))
+          : maxRelativeDateTime(
+              nearestDateTime(15),
+              new Date(`${visitDate} ${startTime}`)
+            ),
       })
       setProperty({ ...property })
       setTasks([...tasks])
@@ -71,7 +74,7 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
     }
   }, [visitDateTime])
 
-  const formatTime = (timeInMinutes) => {
+  const formatDisplayTime = (timeInMinutes) => {
     const minutes = timeInMinutes % 60
     const hours = Math.floor(timeInMinutes / 60)
     return `${hours} hour${hours === 1 ? '' : 's'}, ${minutes} minute${
@@ -80,38 +83,38 @@ export const VisitProvider = ({ children, visitId, customerId }) => {
   }
 
   useEffect(() => {
-    setDuration(formatTime(durationInMinutes))
+    setDuration(formatDisplayTime(durationInMinutes))
   }, [durationInMinutes])
 
   useEffect(() => {
-    setTimeWorked(formatTime(totalHours * 60))
+    setTimeWorked(formatDisplayTime(totalHours * 60))
   }, [totalHours])
 
   useEffect(() => {
     const timeRestedInMinutes = durationInMinutes - totalHours * 60
-    setTimeRested(timeRestedInMinutes ? formatTime(timeRestedInMinutes) : '')
+    setTimeRested(
+      timeRestedInMinutes ? formatDisplayTime(timeRestedInMinutes) : ''
+    )
   }, [totalHours, durationInMinutes])
 
   useEffect(() => {
-    if (Array.isArray(tasks)) {
-      const totals = tasks
-        ?.filter(({ isMarkedForDeletion }) => !isMarkedForDeletion)
-        .filter(({ taskType }) => !!taskType)
-        .reduce(
-          ({ total, totalHours }, task) => {
-            return {
-              total: total + task.quantity * task.price,
-              totalHours: totalHours + task.quantity,
-            }
-          },
-          { total: 0, totalHours: 0 }
-        )
-      if (totals.total !== total) {
-        setTotal(totals.total)
-      }
-      if (totals.totalHours !== totalHours) {
-        setTotalHours(Math.round(totals.totalHours * 100) / 100)
-      }
+    const totals = tasks
+      ?.filter(({ isMarkedForDeletion }) => !isMarkedForDeletion)
+      .filter(({ taskType }) => !!taskType)
+      .reduce(
+        ({ total, totalHours }, task) => {
+          return {
+            total: total + task.quantity * task.price,
+            totalHours: totalHours + task.quantity,
+          }
+        },
+        { total: 0, totalHours: 0 }
+      )
+    if (totals.total !== total) {
+      setTotal(totals.total)
+    }
+    if (totals.totalHours !== totalHours) {
+      setTotalHours(Math.round(totals.totalHours * 100) / 100)
     }
   }, [tasks])
 
