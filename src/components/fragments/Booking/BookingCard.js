@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import { useBooking } from '../../context/BookingContext'
 import { BookingUsersTable } from './BookingUsersTable'
-import { useAuthentication } from '../../context/AuthenticationContext'
 import { CustomerCard } from '../Customer/CustomerCard'
 import { BookingDate } from './BookingDate'
 
